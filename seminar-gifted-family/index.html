@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Дарынды бала және отбасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0f2a4a; --blue:#1f5fa8; --sky:#3d8fd6; --teal:#14a39a; --gold:#e0a526;
+  --coral:#e2614b; --violet:#7b5cc4; --ink:#1c2533; --muted:#5b6677; --line:#dfe5ee;
+  --bg:#f5f7fb; --card:#ffffff; --soft:#eef3fa;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0b1626;font-family:Inter,"Segoe UI",Arial,sans-serif;color:var(--ink);overflow:hidden}
+#stage{position:fixed;left:0;right:0;top:0;bottom:36px;display:flex;align-items:center;justify-content:center}
+#hub svg{max-height:500px}
+#deck{width:1280px;height:720px;position:relative;transform-origin:center center;flex:none}
+.slide{position:absolute;inset:0;background:var(--bg);display:none;padding:46px 60px 40px;overflow:hidden;border-radius:6px}
+.slide.active{display:block;animation:fade .45s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.slide::before{content:"";position:absolute;left:0;top:0;width:100%;height:6px;background:linear-gradient(90deg,var(--navy),var(--blue),var(--teal),var(--gold))}
+.foot{position:absolute;left:60px;right:60px;bottom:14px;display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.kicker{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+h1{font-size:44px;line-height:1.12;font-weight:800;color:var(--navy)}
+h2{font-size:32px;line-height:1.15;font-weight:800;color:var(--navy);margin-bottom:18px}
+h3{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:6px}
+p,li{font-size:16px;line-height:1.45}
+ul.dots{list-style:none}
+ul.dots li{position:relative;padding-left:20px;margin-bottom:7px}
+ul.dots li::before{content:"";position:absolute;left:2px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--teal)}
+ol.num{counter-reset:n;list-style:none}
+ol.num li{counter-increment:n;position:relative;padding-left:34px;margin-bottom:8px}
+ol.num li::before{content:counter(n);position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.g64{grid-template-columns:1.5fr 1fr}.g46{grid-template-columns:1fr 1.4fr}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:0 2px 6px rgba(15,42,74,.05)}
+.card.accent{border-top:4px solid var(--teal)}
+.card.blue{border-top:4px solid var(--blue)}.card.gold{border-top:4px solid var(--gold)}.card.coral{border-top:4px solid var(--coral)}.card.violet{border-top:4px solid var(--violet)}
+.small{font-size:13.5px;line-height:1.4}
+.xs{font-size:12px;color:var(--muted)}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--blue);margin-right:6px}
+table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th{background:var(--navy);color:#fff;font-size:13.5px;text-align:left;padding:9px 11px;font-weight:700}
+td{font-size:13.5px;line-height:1.38;padding:8px 11px;border-top:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#f8fafd}
+td b{color:var(--navy)}
+.num-c{text-align:center;font-variant-numeric:tabular-nums}
+.callout{background:linear-gradient(135deg,#e8f6f5,#eaf1fb);border-left:5px solid var(--teal);border-radius:10px;padding:12px 16px}
+.chart{width:100%;height:auto;display:block;font-family:Inter,Arial,sans-serif}
+.chart .gridl{stroke:#e3e8f0;stroke-width:1}
+.chart .ax{fill:#6b7585;font-size:12px}
+.chart .lbl{fill:#1c2533;font-size:12.5px;font-weight:600}
+.chart .val{fill:#1c2533;font-size:11.5px;font-weight:700}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;margin:4px 0 6px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+/* title slide */
+.title-slide{background:radial-gradient(circle at 85% 20%,#1f5fa8 0,#0f2a4a 55%,#0a1d35 100%);color:#fff}
+.title-slide h1{color:#fff;font-size:46px}
+.title-slide .kicker{color:#7fe0d8}
+.title-slide .meta{margin-top:34px;display:grid;grid-template-columns:170px 1fr;gap:8px 16px;font-size:16px;color:#d6e3f3}
+.title-slide .meta b{color:#fff;font-weight:600}
+.title-slide .foot{color:#9fb3cc}
+/* toc */
+.toc{display:grid;grid-template-columns:1fr 1fr;gap:12px 26px}
+.toc div{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 14px}
+.toc span{flex:none;width:38px;height:38px;border-radius:10px;background:var(--navy);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.toc p{font-size:15.5px;font-weight:600}
+/* timeline */
+.tl{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:8px}
+.tl::before{content:"";position:absolute;left:4%;right:4%;top:26px;height:4px;background:linear-gradient(90deg,var(--blue),var(--teal),var(--gold));border-radius:2px}
+.tl .st{position:relative;text-align:center}
+.tl .yr{position:relative;z-index:1;display:inline-block;background:#fff;border:3px solid var(--blue);color:var(--navy);font-weight:800;border-radius:999px;padding:9px 14px;font-size:15px}
+.tl .st p{font-size:13.5px;margin-top:10px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px}
+/* swot */
+.swot{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.swot .q{border-radius:14px;padding:14px 16px;color:#fff}
+.swot .q h3{color:#fff;display:flex;align-items:center;gap:8px}
+.swot .q li{font-size:14px;margin-bottom:4px}
+.swot .S{background:linear-gradient(135deg,#14a39a,#0e7f78)}
+.swot .W{background:linear-gradient(135deg,#e2614b,#bd4734)}
+.swot .O{background:linear-gradient(135deg,#1f5fa8,#164a85)}
+.swot .T{background:linear-gradient(135deg,#7b5cc4,#5d43a0)}
+.swot ul{padding-left:18px}
+/* stages */
+.stages{display:grid;grid-template-columns:repeat(3,1fr);gap:0;align-items:stretch}
+.stage{position:relative;background:#fff;border:1px solid var(--line);padding:16px 26px 16px 34px;clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%,8% 50%)}
+.stage:first-child{clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%);padding-left:20px}
+.stage h3{font-size:17px}
+.stage .ph{font-size:12px;font-weight:700;color:var(--teal);letter-spacing:.08em;text-transform:uppercase}
+/* nav */
+#ui{position:fixed;right:18px;bottom:6px;display:flex;gap:8px;align-items:center;z-index:5;font-size:13px;color:#cfdbea}
+#ui button{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;width:36px;height:32px;font-size:16px;cursor:pointer}
+#ui button:hover{background:rgba(255,255,255,.25)}
+#bar{position:fixed;left:0;bottom:0;height:4px;background:var(--gold);transition:width .3s;z-index:5}
+#help{position:fixed;left:18px;bottom:10px;font-size:12px;color:#8fa3bd;z-index:5}
+.note{position:absolute;left:60px;bottom:34px;font-size:11.5px;color:var(--muted);font-style:italic}
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{overflow:visible;background:#fff;height:auto}
+  #stage{position:static;display:block}
+  #deck{transform:none!important;width:1280px;height:auto}
+  .slide{display:block!important;position:relative;width:1280px;height:720px;page-break-after:always;break-after:page;border-radius:0;animation:none}
+  #ui,#bar,#help{display:none}
+}
+</style>
+<style>
+.agenda td.t{font-weight:800;color:var(--teal);white-space:nowrap}
+.qz{cursor:pointer;transition:.2s}
+.qz:hover{box-shadow:0 4px 14px rgba(15,42,74,.12)}
+.qz .ans{display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);color:var(--teal);font-weight:600}
+.qz.open .ans{display:block}
+.qz .hint{font-size:11.5px;color:var(--muted);margin-top:6px}
+.qz.open .hint{display:none}
+.bigq{font-size:20px;font-weight:700;color:var(--navy);line-height:1.35}
+.case{background:#fff;border:1px solid var(--line);border-left:6px solid var(--coral);border-radius:12px;padding:16px 20px}
+</style>
+<style>
+.quote{font-size:17px;font-style:italic;color:var(--navy);line-height:1.45}
+.mx td{font-size:13px}
+.rule{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.rule b.n{flex:none;width:26px;height:26px;border-radius:8px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+.rule p{font-size:14px;line-height:1.35}
+</style>
+</head>
+<body>
+<div id="stage"><div id="deck">
+
+<!-- 1 ТИТУЛ -->
+<section class="slide title-slide">
+  <div class="grid" style="grid-template-columns:1.2fr 1fr;align-items:center;height:100%">
+    <div>
+      <div class="kicker">Семинар сабақ · [пән атауы]</div>
+      <h1>Дарынды балалардың отбасында дамуы</h1>
+      <p style="margin-top:16px;font-size:18px;color:#cfe0f3">Теориялық модельдер, ата-аналық стильдер, тәуекелдер және отбасын психологиялық-педагогикалық қолдау</p>
+      <div class="meta">
+        <span>Дайындаған:</span><b>магистрант [Аты-жөні], [топ]</b>
+        <span>Оқытушы:</span><b>[ғылыми дәрежесі, аты-жөні]</b>
+        <span>Ұзақтығы:</span><b>50 минут</b>
+      </div>
+    </div>
+    <div id="ill-title"></div>
+  </div>
+  <div class="foot"><span>[ЖОО атауы] · [Қала] — 2026</span><span>1</span></div>
+</section>
+
+<!-- 2 ЖОСПАР -->
+<section class="slide">
+  <div class="kicker">Ұйымдастыру</div>
+  <h2>Семинардың жоспары</h2>
+  <div class="grid g64">
+    <table class="agenda">
+      <tr><th style="width:14%">Уақыты</th><th style="width:28%">Кезең</th><th>Мазмұны</th><th style="width:16%">Слайдтар</th></tr>
+      <tr><td class="t">5 мин</td><td><b>Кіріспе</b></td><td>Өзектілігі, проблемалық сұрақ, мақсаттар</td><td>3–4</td></tr>
+      <tr><td class="t">17 мин</td><td><b>Теориялық шолу</b></td><td>Ұғымдар, дарындылық модельдері, дарынды баланың ерекшеліктері, отбасы функциялары, ата-аналық стильдер, тәуекелдер</td><td>5–20</td></tr>
+      <tr><td class="t">8 мин</td><td><b>Талқылау</b></td><td>Проблемалық сұрақтар, «Ойлан – жұптас – бөліс»</td><td>21</td></tr>
+      <tr><td class="t">15 мин</td><td><b>Топтық жұмыс</b></td><td>«Әлияның оқиғасы» кейсі, ата-аналарға жадынама</td><td>22–23</td></tr>
+      <tr><td class="t">5 мин</td><td><b>Рефлексия</b></td><td>Өзін-өзі тексеру, қорытынды, үй тапсырмасы</td><td>24–25</td></tr>
+    </table>
+    <div id="ill-plan"></div>
+  </div>
+  <div class="foot"><span>Семинар формасы: проблемалық-талқылау семинары, кейс әдісі</span><span>2</span></div>
+</section>
+
+<!-- 3 МАҚСАТ -->
+<section class="slide">
+  <div class="kicker">Мақсаттар</div>
+  <h2>Семинардың мақсаты мен күтілетін нәтижелер</h2>
+  <div class="callout" style="margin-bottom:14px"><p style="font-size:17px"><b>Мақсаты:</b> дарынды баланың дамуына отбасылық ортаның әсерін теориялық тұрғыда талдау, тиімді және тиімсіз ата-аналық тәжірибелерді ажырату, отбасын педагогикалық қолдау жолдарын анықтау.</p></div>
+  <div class="grid g4">
+    <div class="card blue"><span class="tag">Біледі</span><p class="small" style="margin-top:6px">дарындылықтың негізгі модельдерін (Рензулли, Ганье, Мёнкс) және ата-аналық стильдерді</p></div>
+    <div class="card accent"><span class="tag">Түсінеді</span><p class="small" style="margin-top:6px">отбасы қабілеттің талантқа айналуында қандай рөл атқаратынын</p></div>
+    <div class="card gold"><span class="tag">Талдайды</span><p class="small" style="margin-top:6px">отбасылық тәрбие қателерін және олардың баланың дамуына салдарын</p></div>
+    <div class="card violet"><span class="tag">Қолданады</span><p class="small" style="margin-top:6px">ата-аналарға кеңес беру және кейс шешу барысында алған білімін</p></div>
+  </div>
+  <div class="card" style="margin-top:14px;border-left:5px solid var(--coral)">
+    <p class="small">⚑ <b>Проблемалық сұрақ:</b> <i>Дарын — табиғаттың сыйы ма, әлде отбасы мен ортаның жемісі ме? Ата-ананың қолдауы қай сәтте қысымға айналады?</i></p>
+  </div>
+  <div id="bn-home" style="margin-top:14px"></div>
+  <div class="foot"><span>Семинар соңында осы сұраққа бірге жауап береміз</span><span>3</span></div>
+</section>
+
+<!-- 4 ӨЗЕКТІЛІГІ -->
+<section class="slide">
+  <div class="kicker">01 · Өзектілігі</div>
+  <h2>Неліктен отбасы дарынның шешуші факторы?</h2>
+  <div class="grid g3">
+    <div class="card blue"><h3>Алғашқы даму ортасы</h3><p class="small">Бронфенбреннердің экологиялық теориясы бойынша отбасы — баланың <b>микрожүйесі</b>, яғни оған ең жақын әрі ең ұзақ әсер ететін орта. Баланың қызығушылығы, мотивациясы және өзіне сенімі алдымен отбасында қалыптасады.</p></div>
+    <div class="card accent"><h3>Ғылыми дәлел</h3><p class="small">Б. Блум (1985) әр саладағы <b>120</b> аса талантты адамның (пианистер, математиктер, жүзгіштер, мүсіншілер т.б.) өмірін зерттеп, олардың барлығында ерте жастан <b>отбасының жүйелі қолдауы</b> болғанын анықтады. Табиғи қабілеттің өзі жеткіліксіз.</p></div>
+    <div class="card gold"><h3>Мемлекеттік қажеттілік</h3><p class="small">ҚР «Білім туралы» Заңы дарынды балаларды қолдауды мемлекеттің міндеті ретінде белгілейді. «Дарын» республикалық ғылыми-практикалық орталығы, мамандандырылған мектептер жұмыс істейді. Бірақ мектептің жетістігі отбасының қатысуынсыз толық болмайды.</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px;align-items:center">
+    <div class="callout"><h3>Мәселе неде?</h3><p class="small">Ата-ана баланың дарынын байқағанда екі шектен шығуы мүмкін: <b>елемеу</b> (қабілет дамымай қалады) немесе <b>шамадан тыс қысым</b> (мазасыздық, перфекционизм, кәсіби күйіп кету). Педагогтің міндеті — отбасына «алтын ортаны» табуға көмектесу.</p></div>
+    <div id="ill-scale"></div>
+  </div>
+  <div class="foot"><span>Отбасы — табиғи қабілет пен шынайы талант арасындағы көпір</span><span>4</span></div>
+</section>
+
+<!-- 5 ҰҒЫМДАР -->
+<section class="slide">
+  <div class="kicker">02 · Ұғымдық аппарат</div>
+  <h2>Негізгі ұғымдар</h2>
+  <table>
+    <tr><th style="width:21%">Ұғым</th><th>Анықтамасы</th><th style="width:23%">Авторлар</th></tr>
+    <tr><td><b>Қабілет</b></td><td>Іс-әрекетті табысты орындаудың шарты болып табылатын, білім мен дағдыны меңгеру жылдамдығы мен тереңдігін анықтайтын жеке-психологиялық ерекшеліктер.</td><td>Б.М. Теплов</td></tr>
+    <tr><td><b>Дарындылық</b></td><td>Бір немесе бірнеше іс-әрекет саласында жоғары нәтижеге жетуге мүмкіндік беретін, өмір бойы дамитын психиканың жүйелі сапасы.</td><td>«Дарындылықтың жұмыс тұжырымдамасы» (Д.Б. Богоявленская, В.Д. Шадриков, 2003)</td></tr>
+    <tr><td><b>Дарынды бала</b></td><td>Құрдастарымен салыстырғанда айқын, кейде ерекше жетістіктерімен көзге түсетін немесе оған ішкі алғышарттары бар бала.</td><td>Сонда</td></tr>
+    <tr><td><b>Асинхронды даму</b></td><td>Зияткерлік, эмоционалдық және физикалық дамудың біркелкі емес қарқыны; дарынды баланың ерекше осалдығының көзі.</td><td>Columbus Group (1991), L. Silverman</td></tr>
+    <tr><td><b>Ата-аналық стиль</b></td><td>Ата-ананың балаға қатысты талаптары мен эмоционалдық жылылығының тұрақты үйлесімі.</td><td>D. Baumrind, E. Maccoby</td></tr>
+    <tr><td><b>Андерачивмент</b></td><td>Жоғары қабілетке қарамастан баланың мүмкіндігінен әлдеқайда төмен нәтиже көрсетуі (underachievement).</td><td>J. Whitmore, S. Rimm</td></tr>
+  </table>
+  <div class="foot"><span>«Қабілет → дарындылық → талант» — даму тізбегі</span><span>5</span></div>
+</section>
+
+<!-- 6 МОДЕЛЬДЕР КЕСТЕСІ -->
+<section class="slide">
+  <div class="kicker">02 · Теориялық негіздер</div>
+  <h2>Дарындылық модельдері және отбасының орны</h2>
+  <table>
+    <tr><th style="width:23%">Модель</th><th>Негізгі идеясы</th><th style="width:33%">Отбасына қатысты тұжырым</th></tr>
+    <tr><td><b>Үш сақиналы модель</b><br><span class="xs">J. Renzulli, 1978</span></td><td>Дарындылық — орташадан жоғары қабілет, шығармашылық және тапсырмаға берілгендік тоғысы.</td><td>«Берілгендік» (мотивация) отбасындағы қолдау мен үлгі арқылы қалыптасады.</td></tr>
+    <tr><td><b>Көп интеллект теориясы</b><br><span class="xs">H. Gardner, 1983</span></td><td>Интеллект біреу емес: лингвистикалық, логика-математикалық, музыкалық, кеңістіктік, кинестетикалық, тұлғааралық, тұлғаішілік, натуралистік.</td><td>Ата-ана баланың «өз» саласын байқап, тек академиялық дарынды бағаламауы керек.</td></tr>
+    <tr><td><b>Көпфакторлы модель</b><br><span class="xs">F. Mönks, 1992</span></td><td>Рензулли моделіне үш әлеуметтік фактор қосылады: отбасы, мектеп, құрдастар.</td><td>Отбасы — дарындылық көрінуінің тікелей әлеуметтік шарты.</td></tr>
+    <tr><td><b>DMGT моделі</b><br><span class="xs">F. Gagné, 2004</span></td><td>Табиғи қабілет (gift) даму үдерісі арқылы талантқа (talent) айналады; оған ішкі және сыртқы катализаторлар әсер етеді.</td><td>Отбасы — ең маңызды сыртқы катализатор.</td></tr>
+    <tr><td><b>Жас ерекшелік дарындылығы</b><br><span class="xs">Н.С. Лейтес</span></td><td>Балалық шақтағы жоғары көрсеткіштер жас ерекшелігіне байланысты болып, кейін сақталмауы мүмкін.</td><td>Ерте «жапсырма» тақпау, баланы ұзақ мерзімде қолдау.</td></tr>
+  </table>
+  <div class="foot"><span>Барлық заманауи модельдер дарынды табиғат пен ортаның өзара әрекеті ретінде түсіндіреді</span><span>6</span></div>
+</section>
+
+<!-- 7 ГАНЬЕ -->
+<section class="slide">
+  <div class="kicker">02 · Ф. Ганье моделі (DMGT)</div>
+  <h2>Қабілет қалай талантқа айналады?</h2>
+  <div id="dmgt"></div>
+  <div class="callout" style="margin-top:10px"><p class="small"><b>Түйін:</b> Ганье бойынша табиғи қабілет — тек «шикізат». Оны талантқа айналдыратын — <b>жүйелі даму үдерісі</b> (оқу, жаттығу), ал бұл үдерістің сапасын көбіне <b>отбасы</b> анықтайды: уақыт, ресурс, эмоционалдық қолдау, құндылықтар.</p></div>
+  <div class="foot"><span>Gagné F. Transforming gifts into talents: the DMGT as a developmental theory // High Ability Studies, 2004</span><span>7</span></div>
+</section>
+
+<!-- 8 МЁНКС -->
+<section class="slide">
+  <div class="kicker">02 · Ф. Мёнкс моделі</div>
+  <h2>Дарындылықтың көпфакторлы моделі</h2>
+  <div class="grid g46" style="align-items:center">
+    <div id="monks"></div>
+    <div class="grid" style="gap:10px">
+      <div class="card coral"><h3>Отбасы</h3><p class="small">Эмоционалдық қауіпсіздік, қызығушылықты қолдау, ресурстар (кітап, үйірме, уақыт), құндылықтар мен үлгі.</p></div>
+      <div class="card blue"><h3>Мектеп</h3><p class="small">Саралап оқыту, байытылған бағдарламалар, ұстаздың кәсіби қолдауы, олимпиадалар мен жобалар.</p></div>
+      <div class="card accent"><h3>Құрдастар</h3><p class="small">Қабылдану, ортақ қызығушылықтағы достар, әлеуметтік дағдылар; оқшаулану — дарынды баланың жиі кездесетін мәселесі.</p></div>
+      <div class="callout"><p class="small"><b>Неліктен маңызды?</b> Бір фактордың әлсіздігі (мысалы, отбасындағы түсінбеушілік) ішкі әлеуетті бұғаттап, дарынның көрінбей қалуына әкеледі.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Ортадағы үш шеңбер — Рензулли моделі; үшбұрыштың төбелері — Мёнкс қосқан әлеуметтік факторлар</span><span>8</span></div>
+</section>
+
+<!-- 9 ДАРЫНДЫ БАЛАНЫҢ ЕРЕКШЕЛІКТЕРІ -->
+<section class="slide">
+  <div class="kicker">03 · Дарынды бала</div>
+  <h2>Дарынды баланың ерекшеліктері</h2>
+  <div class="grid g4" id="traits"></div>
+  <div class="callout" style="margin-top:14px"><p class="small"><b>Ата-анаға маңызды:</b> бұл белгілердің әрқайсысының «көлеңкелі жағы» бар. Мысалы, жоғары сыншылдық — өзіне де сыншыл болуға (перфекционизм), ал жоғары сезімталдық — сынға ауыр қарауға әкелуі мүмкін. Сондықтан ерекшелікті «мінез кемшілігі» деп емес, <b>дамудың табиғи бөлігі</b> деп түсіну қажет.</p></div>
+  <div class="foot"><span>Дереккөз: А.И. Савенков (2000), L. Silverman (2013) бойынша жалпыланды</span><span>9</span></div>
+</section>
+
+<!-- 10 АСИНХРОНДЫ ДАМУ -->
+<section class="slide">
+  <div class="kicker">03 · Асинхронды даму</div>
+  <h2>«Ақылы ересек, жүрегі — бала»: асинхронды даму</h2>
+  <div class="grid g64">
+    <div class="card"><h3>8 жастағы дарынды баланың даму «жасы» (шартты мысал)</h3><div class="legend" id="lg-async"></div><div id="ch-async"></div></div>
+    <div class="grid" style="gap:12px;align-content:start">
+      <div class="card accent"><h3>Бұл не көрсетеді?</h3><p class="small">Бала 12 жастағыдай ойлап, 11 жастағыдай оқи алады, бірақ эмоциясы мен әлеуметтік дағдылары 7–8 жастағы құрдастарымен бірдей. Columbus Group (1991) дарындылықты дәл осы <b>асинхронды даму</b> арқылы анықтайды.</p></div>
+      <div class="card coral"><h3>Жиі кездесетін қате</h3><p class="small">Ата-ана «Сен ақылдысың ғой, неге жылайсың?» деп, баладан жасынан тыс эмоционалдық жетілуді талап етеді. Бұл баланың сезімін жоққа шығарады.</p></div>
+      <div class="card gold"><h3>Дұрыс тәсіл</h3><p class="small">Танымдық деңгейіне сай тапсырма беріп, эмоционалдық тұрғыда <b>жасына сай</b> қолдау көрсету.</p></div>
+    </div>
+  </div>
+  <div class="note">Диаграмма түсіндіру мақсатындағы шартты мысал; сызық — баланың хронологиялық жасы.</div>
+  <div class="foot"><span>Асинхронды даму — дарынды баланың әрі күші, әрі осалдығы</span><span>10</span></div>
+</section>
+
+<!-- 11 ОТБАСЫ ФУНКЦИЯЛАРЫ -->
+<section class="slide">
+  <div class="kicker">04 · Отбасының рөлі</div>
+  <h2>Дарынды баланың дамуындағы отбасының функциялары</h2>
+  <div class="grid g64" style="align-items:center">
+    <div id="hub"></div>
+    <table>
+      <tr><th style="width:38%">Функция</th><th>Нақты көрінісі</th></tr>
+      <tr><td><b>Эмоционалдық</b></td><td>Сөзсіз қабылдау, қауіпсіздік сезімі</td></tr>
+      <tr><td><b>Танымдық</b></td><td>Кітап, ойын, саяхат, бірге зерттеу</td></tr>
+      <tr><td><b>Мотивациялық</b></td><td>Қызығушылықты байқау, еңбекті бағалау</td></tr>
+      <tr><td><b>Құндылықтық</b></td><td>Еңбекқорлық, адалдық, жауапкершілік</td></tr>
+      <tr><td><b>Ұйымдастырушылық</b></td><td>Ұстаз, үйірме, күн тәртібі, ресурс</td></tr>
+      <tr><td><b>Серіктестік</b></td><td>Мектеппен, ұстазбен тұрақты байланыс</td></tr>
+    </table>
+  </div>
+  <div class="foot"><span>Отбасы «ұстаз» емес, ең алдымен «қолдаушы орта» болуы тиіс</span><span>11</span></div>
+</section>
+
+<!-- 12 БЛУМ КЕЗЕҢДЕРІ -->
+<section class="slide">
+  <div class="kicker">04 · Б. Блум зерттеуі (1985)</div>
+  <h2>Талант дамуының үш кезеңі және ата-ананың рөлі</h2>
+  <div id="bloom"></div>
+  <div class="callout" style="margin-top:10px"><p class="small"><b>Неліктен маңызды?</b> Әр кезеңде ата-ананың рөлі өзгереді: алдымен <b>ойын серігі</b>, кейін <b>ұйымдастырушы</b>, соңында <b>эмоционалдық тірек</b>. Бірінші кезеңді өткізіп жіберіп, бірден жүйелі жаттығуды талап ету баланың қызығушылығын сөндіреді.</p></div>
+  <div class="foot"><span>Bloom B.S. (Ed.) Developing Talent in Young People. — New York, 1985</span><span>12</span></div>
+</section>
+
+<!-- 13 БАУМРИНД -->
+<section class="slide">
+  <div class="kicker">05 · Ата-аналық стильдер</div>
+  <h2>Тәрбие стилі дарынды балаға қалай әсер етеді?</h2>
+  <div class="grid g46" style="align-items:center">
+    <div id="baum"></div>
+    <div>
+      <table>
+        <tr><th style="width:25%">Стиль</th><th>Дарынды балаға әсері</th></tr>
+        <tr><td><b style="color:#14a39a">Авторитетті</b></td><td>Ішкі мотивация, дербестік, өзіне сенім, тұрақты жетістік — <b>ең тиімді</b></td></tr>
+        <tr><td><b style="color:#e2614b">Авторитарлы</b></td><td>Сыртқы мотивация, перфекционизм, мазасыздық, «ата-ана үшін оқу»</td></tr>
+        <tr><td><b style="color:#e0a526">Рұқсат беруші</b></td><td>Тәртіп пен табандылықтың әлсіздігі, әлеуетті толық іске асырмау</td></tr>
+        <tr><td><b style="color:#7b5cc4">Немқұрайлы</b></td><td>Андерачивмент, оқшаулану, қабілеттің «сөнуі»</td></tr>
+      </table>
+      <div class="callout" style="margin-top:10px"><p class="small"><b>Түйін:</b> дарынды бала үшін «жоғары талап» жеткіліксіз — ол міндетті түрде <b>жоғары жылылықпен</b> қатар жүруі тиіс.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Baumrind D. (1971); Maccoby E., Martin J. (1983) — төрт стиль типологиясы</span><span>13</span></div>
+</section>
+
+<!-- 14 ЙЕРКС-ДОДСОН -->
+<section class="slide">
+  <div class="kicker">05 · Күту мен қысым</div>
+  <h2>Ата-ана күтуінің «алтын ортасы»</h2>
+  <div class="grid g64">
+    <div class="card"><div id="yd"></div></div>
+    <div class="grid" style="gap:12px;align-content:start">
+      <div class="card blue"><h3>Йеркс–Додсон заңы (1908)</h3><p class="small">Іс-әрекет нәтижелілігі мен қозу (күйзеліс) деңгейі арасындағы байланыс «төңкерілген U» тәрізді: орташа деңгей — оңтайлы, тым төмен және тым жоғары деңгей нәтижені төмендетеді.</p></div>
+      <div class="card gold"><h3>Отбасына қолдану</h3><p class="small">Күту мүлде болмаса — бала енжар; орынды күту мен қолдау — мотивация мен даму; шамадан тыс қысым — мазасыздық, сәтсіздіктен қорқу, burnout.</p></div>
+      <div class="callout"><p class="small">Бұл — классикалық заңның отбасылық тәрбиеге <b>аналогия</b> ретінде қолданылуы; график түсіндіру мақсатында берілген.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Yerkes R.M., Dodson J.D. // Journal of Comparative Neurology and Psychology, 1908</span><span>14</span></div>
+</section>
+
+<!-- 15 ҚАТЕЛЕР -->
+<section class="slide">
+  <div class="kicker">05 · Тәуекелдер</div>
+  <h2>Отбасылық тәрбиедегі типтік қателер</h2>
+  <table>
+    <tr><th style="width:18%">Қателік</th><th style="width:24%">Көрінісі</th><th style="width:28%">Салдары</th><th>Дұрыс тәсіл</th></tr>
+    <tr><td><b>Гиперқамқорлық</b></td><td>Бәрін бала үшін шешу, тек оқумен айналысуын талап ету</td><td>Дербестіктің, тұрмыстық дағдылардың төмендеуі</td><td>Жасына сай жауапкершілік беру</td></tr>
+    <tr><td><b>Шамадан тыс қысым</b></td><td>«Тек бірінші орын», жеңіліске ұрсу</td><td>Мазасыздық, перфекционизм, кәсіби күйіп кету</td><td>Жеке прогреске назар аудару</td></tr>
+    <tr><td><b>«Жұлдыз» мәртебесі</b></td><td>Үнемі «данышпансың» деп мақтау</td><td>Сыннан қорқу, қиын тапсырмадан қашу</td><td>Еңбек пен стратегияны мақтау</td></tr>
+    <tr><td><b>Салыстыру</b></td><td>Бауырларымен, құрдастарымен</td><td>Өзін-өзі бағалаудың бұзылуы, бауырлар арасындағы қызғаныш</td><td>Кешегі өзімен салыстыру</td></tr>
+    <tr><td><b>Кестенің толып кетуі</b></td><td>Күніне 3–4 үйірме, бос уақыттың жоқтығы</td><td>Шаршау, еркін ойын мен шығармашылықтың жоғалуы</td><td>Баламен бірге таңдау, демалыс уақытын сақтау</td></tr>
+    <tr><td><b>Елемеу</b></td><td>«Көп сұрақ қоя берме», қызығушылығын қолдамау</td><td>Андерачивмент, оқшаулану</td><td>Сұрақтарына жауапты бірге іздеу</td></tr>
+  </table>
+  <div class="foot"><span>Көп қателік ата-ананың жақсы ниетінен туады — сондықтан ата-ана құзыреттілігін арттыру маңызды</span><span>15</span></div>
+</section>
+
+<!-- 16 МАҚТАУ -->
+<section class="slide">
+  <div class="kicker">05 · Мақтаудың психологиясы</div>
+  <h2>Қалай мақтау керек? К. Дуэк зерттеуі</h2>
+  <div class="grid g2">
+    <div class="card coral"><h3>✗ Қабілетті мақтау → «бекітілген ойлау»</h3>
+      <ul class="dots small" style="margin-top:6px"><li>«Сен нағыз данышпансың!»</li><li>«Саған бәрі оңай ғой»</li><li>«Сен сыныптағы ең ақылды баласың»</li></ul>
+      <p class="small" style="margin-top:8px;color:var(--coral)"><b>Бала ойлайды:</b> «Қателессем — ақылды емес болғаным. Қиын тапсырманы алмай-ақ қояйын».</p></div>
+    <div class="card accent"><h3>✓ Үдерісті мақтау → «өсу ойлауы»</h3>
+      <ul class="dots small" style="margin-top:6px"><li>«Бұл есепке қалай тәсіл таптың?»</li><li>«Көп еңбектендің, нәтиже — соның жемісі»</li><li>«Қиын болса да тастамадың»</li></ul>
+      <p class="small" style="margin-top:8px;color:var(--teal)"><b>Бала ойлайды:</b> «Қателік — үйренудің бөлігі. Келесіде басқа тәсілмен көремін».</p></div>
+  </div>
+  <div class="grid g64" style="margin-top:14px;align-items:center">
+    <div class="callout"><h3>Зерттеу нәтижесі</h3><p class="small">C. Mueller және C. Dweck (1998) 5-сынып оқушыларымен жүргізген эксперименттер сериясында <b>ақылдылығы үшін мақталған</b> балалар сәтсіздіктен кейін қиын тапсырмалардан жиі бас тартып, табандылығы төмендегенін, тіпті нәтижелерін асыра айтуға бейім болғанын көрсетті. <b>Еңбегі үшін мақталған</b> балалар қиындықта да табанды болып, оқуға қызығушылығын сақтады.</p></div>
+    <div id="ill-praise"></div>
+  </div>
+  <div class="foot"><span>Mueller C.M., Dweck C.S. // Journal of Personality and Social Psychology, 1998, 75(1)</span><span>16</span></div>
+</section>
+
+<!-- 17 ҰЛТТЫҚ ПЕДАГОГИКА -->
+<section class="slide">
+  <div class="kicker">06 · Ұлттық тәжірибе</div>
+  <h2>Қазақ отбасындағы дарынды тәрбиелеу дәстүрі</h2>
+  <div class="grid g3">
+    <div class="card gold"><p class="quote">«Әке — асқар тау, ана — бауырындағы бұлақ, бала — жағасындағы құрақ»</p><p class="xs" style="margin-top:6px">Халық мәтелі: отбасы — баланың өсуіне арналған табиғи орта</p></div>
+    <div class="card blue"><h3>Тәлім-тәрбие дәстүрлері</h3><ul class="dots small"><li>ұстаз-шәкірт жолы (жыршы, күйші, ақын, шебер)</li><li>ата-әже тәрбиесі мен ауызша өнер</li><li>айтыс, жұмбақ, жаңылтпаш — ой ұшқырлығы</li><li>бата, өнеге, шежіре — құндылықтар</li></ul></div>
+    <div class="card accent"><h3>Тарихи мысал</h3><p class="small">Абай Құнанбайұлының ақындық дарынының қалыптасуында әжесі <b>Зеренің</b> және анасы <b>Ұлжанның</b> ауыз әдебиеті үлгілерімен, ертегі, жыр арқылы берген тәрбиесі ерекше рөл атқарғаны белгілі.</p></div>
+  </div>
+  <div id="bn-yurt" style="margin-top:14px"></div>
+  <div class="foot"><span>Жарықбаев Қ., Қалиев С. Қазақ тәлім-тәрбиесі. — Алматы: Санат, 1995</span><span>17</span></div>
+</section>
+
+<!-- 18 СЕРІКТЕСТІК -->
+<section class="slide">
+  <div class="kicker">06 · Отбасы – мектеп – қоғам</div>
+  <h2>Серіктестіктің алты түрі (Дж. Эпстейн) және қолдау жүйесі</h2>
+  <div class="grid g64">
+    <table>
+      <tr><th style="width:28%">Қатысу түрі</th><th>Дарынды балаға қатысты мысал</th></tr>
+      <tr><td><b>1. Ата-аналық тәрбие</b></td><td>Ата-аналарға дарындылық туралы семинарлар, кеңестер</td></tr>
+      <tr><td><b>2. Коммуникация</b></td><td>Мұғаліммен тұрақты кері байланыс, жеке даму жоспарын талқылау</td></tr>
+      <tr><td><b>3. Еріктілік</b></td><td>Ата-ананың үйірме, жоба, экскурсия ұйымдастыруға қатысуы</td></tr>
+      <tr><td><b>4. Үйде оқу</b></td><td>Қызығушылыққа сай кітап, зерттеу, бірлескен жобалар</td></tr>
+      <tr><td><b>5. Шешім қабылдау</b></td><td>Ата-аналар кеңесінде дарынды балалар бағдарламасын талқылау</td></tr>
+      <tr><td><b>6. Қоғаммен байланыс</b></td><td>ЖОО, кітапхана, музей, ғылыми орталықтармен ынтымақтастық</td></tr>
+    </table>
+    <div class="grid" style="gap:10px;align-content:start">
+      <div class="card blue"><h3>Қазақстандағы ресурстар</h3><ul class="dots small"><li>«Дарын» республикалық ғылыми-практикалық орталығы: олимпиадалар, ғылыми жобалар байқаулары</li><li>Мамандандырылған мектептер: НЗМ, БИЛ, РФММ, облыстық «Дарын» мектептері</li><li>Қосымша білім: оқушылар сарайлары, үйірмелер, жазғы мектептер</li></ul></div>
+      <div class="callout"><p class="small"><b>Ата-ананың рөлі:</b> мүмкіндіктер туралы ақпарат алу, баламен бірге таңдау жасау және оның қызығушылығы мен күшіне сай жүктемені реттеу.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Epstein J.L. et al. School, Family, and Community Partnerships, 2002</span><span>18</span></div>
+</section>
+
+<!-- 19 БАҒАЛАУ -->
+<section class="slide">
+  <div class="kicker">07 · Диагностика</div>
+  <h2>Отбасылық ортаны және дарындылықты қалай зерттейміз?</h2>
+  <div class="grid g46">
+    <div class="card"><h3>Отбасылық орта профилі (шартты мысал)</h3><div class="legend" id="lg-radar"></div><div id="ch-radar"></div></div>
+    <div>
+      <table>
+        <tr><th style="width:30%">Не зерттеледі?</th><th>Әдістеме</th></tr>
+        <tr><td><b>Ата-ана қатынасы</b></td><td>А.Я. Варга, В.В. Столин «Ата-ана қатынасы тест-сауалнамасы»</td></tr>
+        <tr><td><b>Тәрбие стилі</b></td><td>Э.Г. Эйдемиллер «Отбасылық қатынастарды талдау» (АСВ)</td></tr>
+        <tr><td><b>Ата-ана көзқарасы</b></td><td>PARI (E. Schaefer, R. Bell, 1958)</td></tr>
+        <tr><td><b>Баланың отбасын қабылдауы</b></td><td>«Отбасы суреті» проективті әдістемесі (R. Burns, S. Kaufman)</td></tr>
+        <tr><td><b>Дарындылық белгілері</b></td><td>А.И. Савенковтың «Дарындылық картасы»; Рензулли шкалалары (SRBCSS)</td></tr>
+      </table>
+      <div class="callout" style="margin-top:10px"><p class="small"><b>Түсіндірме:</b> «А» отбасы — теңгерімді, «Б» отбасы — танымдық ресурсы жоғары болғанымен, дербестікке ерік бермейтін және демалысты елемейтін «қысымды» модель.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Бір әдістеме жеткіліксіз — ата-ана, бала және педагог көзқарастары салыстырылады</span><span>19</span></div>
+</section>
+
+<!-- 20 АПТА ТЕҢГЕРІМІ -->
+<section class="slide">
+  <div class="kicker">07 · Уақыт теңгерімі</div>
+  <h2>10 жастағы дарынды баланың аптасы: теңгерім қандай болуы керек?</h2>
+  <div class="grid g2">
+    <div class="card"><h3>Ұсынылатын апталық үлгі (168 сағат)</h3><div class="grid" style="grid-template-columns:1fr 1fr;align-items:center"><div id="ch-donut"></div><div id="lg-donut" class="small"></div></div></div>
+    <div class="grid" style="gap:12px;align-content:start">
+      <div class="card accent"><h3>Ұйқы</h3><p class="small">Американдық ұйқы медицинасы академиясы 6–12 жастағы балаларға тәулігіне <b>9–12 сағат</b> ұйқыны ұсынады. Ұйқы — есте сақтау мен шығармашылықтың физиологиялық негізі.</p></div>
+      <div class="card gold"><h3>Еркін ойын</h3><p class="small">Құрылымдалмаған ойын шығармашылық пен өзін-өзі реттеуді дамытады. Дарынды баланың барлық уақытын үйірмемен толтыру — оны осы мүмкіндіктен айыру.</p></div>
+      <div class="card coral"><h3>Отбасымен уақыт</h3><p class="small">Бірге тамақтану, серуен, әңгіме — эмоционалдық тұрақтылықтың ең арзан әрі ең тиімді құралы.</p></div>
+    </div>
+  </div>
+  <div class="note">Диаграмма — ұсынылатын теңгерімнің шартты үлгісі.</div>
+  <div class="foot"><span>Даму — тек сабақ сағаттарының саны емес, теңгерімнің сапасы</span><span>20</span></div>
+</section>
+
+<!-- 21 ТАЛҚЫЛАУ -->
+<section class="slide">
+  <div class="kicker">08 · Талқылау · 8 минут</div>
+  <h2>Талқылауға арналған сұрақтар</h2>
+  <div class="grid g2" style="gap:14px">
+    <div class="card blue"><p class="bigq">1. Дарынды балаға «ерекше» тәрбие қажет пе, әлде оны басқа балалар сияқты тәрбиелеген дұрыс па?</p></div>
+    <div class="card accent"><p class="bigq">2. Ата-ананың арманы мен баланың қызығушылығы сәйкес келмесе, не істеу керек?</p></div>
+    <div class="card gold"><p class="bigq">3. Отбасындағы басқа балалар «дарынды» бауырының көлеңкесінде қалмауы үшін не істеу қажет?</p></div>
+    <div class="card violet"><p class="bigq">4. Цифрлық орта (гаджет, онлайн курстар) дарынды дамыта ма, әлде кедергі ме?</p></div>
+  </div>
+  <div class="callout" style="margin-top:14px"><p class="small"><b>Талқылау ережесі:</b> әр пікір дәлелмен (теория, зерттеу, тәжірибе) негізделеді · бір-бірін тыңдаймыз · пікірді сынаймыз, адамды емес.</p></div>
+  <div id="bn-discuss" style="margin-top:14px"></div>
+  <div class="foot"><span>Әдіс: «Ойлан – жұптас – бөліс» (Think–Pair–Share)</span><span>21</span></div>
+</section>
+
+<!-- 22 КЕЙС -->
+<section class="slide">
+  <div class="kicker">09 · Топтық жұмыс · 10 минут</div>
+  <h2>Кейс-тапсырма: «Әлияның оқиғасы»</h2>
+  <div class="grid g64">
+    <div class="case">
+      <p class="small"><b>Жағдаят.</b> Әлия — 9 жаста, 4-сынып оқушысы. 5 жасынан оқи бастаған, математикадан жоғары сынып есептерін шығарады, фортепианода ойнайды. Ата-анасы оны аптасына алты үйірмеге апарады: математика, ағылшын тілі, фортепиано, шахмат, робототехника, жүзу. Соңғы айларда Әлия басы ауыратынын жиі айтады, жылауық болып кетті, шахматтан ұтылғанда қатты ренжиді, «Мен жеткілікті жақсы емеспін» дейді. Анасы: «Қабілеті бар, уақытты жоғалтуға болмайды», — дейді. Әкесі жұмыстан кеш келеді, қызымен аз сөйлеседі. Сынып жетекшісі Әлияның сабақта зеріккенін және құрдастарымен аз араласатынын байқады.</p>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><span class="tag">асинхронды даму</span><span class="tag">перфекционизм</span><span class="tag">кестенің толуы</span><span class="tag">эмоционалдық қолдау</span><span class="tag">мектептегі зерігу</span></div>
+    </div>
+    <div class="grid" style="gap:10px;align-content:start">
+      <div class="card blue"><h3>1-топ · Психолог</h3><p class="small">Мәселенің себептерін теориялар (асинхрондық, Баумринд, Йеркс–Додсон, Дуэк) тұрғысынан талдаңыз.</p></div>
+      <div class="card accent"><h3>2-топ · Мұғалім</h3><p class="small">Ата-анамен әңгіменің жоспарын және сабақтағы саралау тәсілдерін ұсыныңыз.</p></div>
+      <div class="card gold"><h3>3-топ · Ата-ана</h3><p class="small">Әлияға арналған жаңа, теңгерімді апталық кесте құрыңыз.</p></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px"><p class="small"><b>Бағалау критерийлері:</b> мәселені дұрыс анықтау · теорияға сүйену · шешімнің нақтылығы мен орындалуы · баланың мүддесін басты орынға қою · таныстыру сапасы (әр топқа 2 минут).</p></div>
+  <div class="foot"><span>Кейс шартты, оқу мақсатында құрастырылған</span><span>22</span></div>
+</section>
+
+<!-- 23 ЖАДЫНАМА -->
+<section class="slide">
+  <div class="kicker">09 · Практикалық нәтиже · 5 минут</div>
+  <h2>Ата-аналарға арналған жадынама: 10 ереже</h2>
+  <div class="grid" style="grid-template-columns:1fr 1fr 300px;gap:10px 14px;align-items:start">
+    <div class="grid" style="gap:8px" id="rules1"></div>
+    <div class="grid" style="gap:8px" id="rules2"></div>
+    <div id="ill-rules"></div>
+  </div>
+  <div class="callout" style="margin-top:12px"><p class="small"><b>Топтық тапсырма:</b> жадынамаға кейс нәтижесіне сүйеніп тағы бір ереже қосыңыз және оны теориямен негіздеңіз.</p></div>
+  <div class="foot"><span>Жадынаманы ата-аналар жиналысында тарату материалы ретінде қолдануға болады</span><span>23</span></div>
+</section>
+
+<!-- 24 ӨЗІН-ӨЗІ ТЕКСЕРУ -->
+<section class="slide">
+  <div class="kicker">10 · Рефлексия</div>
+  <h2>Өзін-өзі тексеру сұрақтары</h2>
+  <div class="grid g3" id="quiz"></div>
+  <div class="callout" style="margin-top:14px"><p class="small"><b>«3–2–1» рефлексиясы:</b> бүгін білген <b>3</b> жаңа ұғым · мені ойландырған <b>2</b> идея · әлі де түсінгім келетін <b>1</b> сұрақ.</p></div>
+  <div id="bn-reflect" style="margin-top:14px"></div>
+  <div class="foot"><span>Жауапты көру үшін карточканы басыңыз</span><span>24</span></div>
+</section>
+
+<!-- 25 ҚОРЫТЫНДЫ -->
+<section class="slide">
+  <div class="kicker">10 · Қорытынды</div>
+  <h2>Семинардың негізгі тұжырымдары</h2>
+  <div class="grid g2">
+    <ol class="num">
+      <li class="small">Дарын — табиғи қабілет пен ортаның өзара әрекетінің нәтижесі; Ганье моделінде отбасы — ең маңызды сыртқы катализатор.</li>
+      <li class="small">Дарынды баланың асинхронды дамуы оған зияткерлік деңгейіне сай тапсырма мен жасына сай эмоционалдық қолдауды қажет етеді.</li>
+      <li class="small">Ең тиімді тәрбие стилі — авторитетті: жоғары жылылық пен орынды талаптың үйлесімі.</li>
+    </ol>
+    <ol class="num" style="counter-reset:n 3">
+      <li class="small">Негізгі тәуекелдер: шамадан тыс қысым, қабілетті мақтау, салыстыру, кестенің толуы және елемеу.</li>
+      <li class="small">Отбасы – мектеп – қоғам серіктестігі және ата-ана құзыреттілігін арттыру — дарынды қолдаудың басты жолы.</li>
+    </ol>
+  </div>
+  <div class="callout" style="margin-top:12px;border-left-color:var(--gold)"><h3>Проблемалық сұраққа жауап</h3><p class="small">Дарын — табиғаттың сыйы, бірақ оның талантқа айналуы отбасына байланысты. Қолдау қысымға баланың мүддесінің орнына ата-ананың амбициясы қойылғанда, ал жүктеме баланың эмоционалдық мүмкіндігінен асқанда айналады.</p></div>
+  <div class="card" style="margin-top:10px"><p class="small"><b>Үй тапсырмасы:</b> бастауыш сынып оқушыларының ата-аналарына арналған «Дарынды баланы қалай қолдаймыз?» тақырыбында буклет әзірлеңіз (кемінде 3 ғылыми дереккөзге сүйеніп).</p></div>
+  <div id="bn-grad" style="margin-top:12px"></div>
+  <div class="foot"><span>Әр тұжырым семинар мақсаттарына жауап береді</span><span>25</span></div>
+</section>
+
+<!-- 26 ӘДЕБИЕТТЕР -->
+<section class="slide">
+  <div class="kicker">Дереккөздер</div>
+  <h2>Ұсынылатын әдебиеттер</h2>
+  <div class="grid g2" style="gap:4px 28px">
+    <ol class="num" id="refs1"></ol>
+    <ol class="num" id="refs2" style="counter-reset:n 8"></ol>
+  </div>
+  <div class="foot"><span>Семинарға дайындық үшін негізгі және қосымша әдебиеттер</span><span>26</span></div>
+</section>
+
+<!-- 27 РАХМЕТ -->
+<section class="slide title-slide">
+  <div class="grid" style="grid-template-columns:1.2fr 1fr;align-items:center;height:100%">
+    <div>
+      <div class="kicker">Назарларыңызға рақмет!</div>
+      <h1>Сұрақтар мен пікірлерге дайынмын</h1>
+      <p style="margin-top:18px;font-size:19px;color:#cfe0f3;max-width:580px;font-style:italic">«Ұяда не көрсең, ұшқанда соны ілесің». Дарынның тамыры — отбасындағы махаббат пен сенімде.</p>
+      <div class="meta"><span>Дайындаған:</span><b>[Аты-жөні] · [e-mail]</b><span>Оқытушы:</span><b>[Аты-жөні]</b></div>
+    </div>
+    <div id="ill-end"></div>
+  </div>
+  <div class="foot"><span>[Қала] — 2026</span><span>27</span></div>
+</section>
+
+</div></div>
+
+<div id="bar"></div>
+<div id="help">← → бет ауыстыру · F — толық экран · P — PDF басып шығару</div>
+<div id="ui"><button id="prev" aria-label="Алдыңғы">‹</button><span id="cnt"></span><button id="next" aria-label="Келесі">›</button></div>
+
+<script>
+/* ===================== ТҮСТЕР ===================== */
+const C={navy:'#0f2a4a',blue:'#1f5fa8',sky:'#3d8fd6',teal:'#14a39a',gold:'#e0a526',coral:'#e2614b',violet:'#7b5cc4',grey:'#a9b4c4'};
+const $=id=>document.getElementById(id);
+
+/* ===================== ИЛЛЮСТРАЦИЯЛАР (SVG) ===================== */
+function student(x,y,s,shirt,skin){skin=skin||'#f2c9a0';return `<g transform="translate(${x},${y}) scale(${s})">
+ <circle cx="0" cy="-58" r="18" fill="${skin}"/><path d="M-18 -62 q18 -26 36 0 q-4 -16 -18 -18 q-14 2 -18 18z" fill="#2b2b3a"/>
+ <path d="M-26 0 q0 -36 26 -36 q26 0 26 36z" fill="${shirt}"/><rect x="-22" y="-4" width="44" height="6" rx="3" fill="${shirt}" opacity=".7"/></g>`}
+function book(x,y,c){return `<g transform="translate(${x},${y})"><path d="M0 0 l34 -8 l34 8 v40 l-34 -8 l-34 8z" fill="${c}"/><path d="M34 -8 v40" stroke="#fff" stroke-width="2"/></g>`}
+function building(w){w=w||460;return `<svg viewBox="0 0 460 300" class="chart" style="max-width:${w}px;margin:auto">
+ <defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dbeafb"/><stop offset="1" stop-color="#f5f9ff"/></linearGradient></defs>
+ <rect x="0" y="0" width="460" height="300" rx="18" fill="url(#sk)"/>
+ <circle cx="390" cy="58" r="26" fill="#f6c851"/>
+ <rect x="0" y="248" width="460" height="52" fill="#cfe7c9"/>
+ <rect x="70" y="110" width="320" height="140" fill="#fff" stroke="#0f2a4a" stroke-width="3"/>
+ <polygon points="60,112 230,52 400,112" fill="#1f5fa8" stroke="#0f2a4a" stroke-width="3"/>
+ <rect x="205" y="70" width="50" height="30" fill="#fff" stroke="#0f2a4a" stroke-width="2"/><text x="230" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#0f2a4a">БИЛ</text>
+ ${[0,1,2,3,4,5].map(i=>`<rect x="${92+i*50}" y="132" width="30" height="34" fill="#9cc7ef" stroke="#0f2a4a" stroke-width="2"/>`+(i==2||i==3?'':`<rect x="${92+i*50}" y="186" width="30" height="34" fill="#9cc7ef" stroke="#0f2a4a" stroke-width="2"/>`)).join('')}
+ <rect x="208" y="182" width="44" height="68" fill="#e0a526" stroke="#0f2a4a" stroke-width="2"/>
+ <line x1="230" y1="52" x2="230" y2="22" stroke="#0f2a4a" stroke-width="3"/><path d="M230 22 h30 l-6 8 l6 8 h-30z" fill="#00afca"/>
+ <circle cx="40" cy="226" r="24" fill="#5bb36a"/><rect x="37" y="234" width="6" height="18" fill="#7a5a3a"/>
+ <circle cx="425" cy="222" r="26" fill="#5bb36a"/><rect x="422" y="232" width="6" height="20" fill="#7a5a3a"/>
+ ${student(150,292,.75,'#14a39a')}${student(310,292,.75,'#e2614b','#e8b88c')}${student(360,292,.65,'#7b5cc4')}
+</svg>`}
+/* ===================== БАННЕР-ИЛЛЮСТРАЦИЯЛАР ===================== */
+function P(x,y,s,o){o=Object.assign({shirt:C.teal,skin:'#f2c9a0',hair:'#2b2233',pants:'#34405a',style:'short',raise:0,flip:1},o);
+ const armR=o.raise?`<path d="M13 42 Q24 26 22 6" stroke="${o.shirt}" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="22" cy="5" r="4" fill="${o.skin}"/>`:`<path d="M13 42 Q19 54 18 66" stroke="${o.shirt}" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="18" cy="67" r="3.6" fill="${o.skin}"/>`;
+ const hair=o.style==='long'?`<path d="M-14 22 Q-15 4 0 4 Q15 4 14 22 L15 40 Q10 42 9 34 L9 16 Q0 12 -9 16 L-9 34 Q-10 42 -15 40Z" fill="${o.hair}"/>`
+  :o.style==='bun'?`<circle cx="0" cy="3" r="7" fill="${o.hair}"/><path d="M-13.5 19 Q-13 5 0 5 Q13 5 13.5 19 Q8 11 0 12 Q-8 11 -13.5 19Z" fill="${o.hair}"/>`
+  :`<path d="M-13.5 19 Q-14 4 0 4 Q14 4 13.5 19 Q9 9 0 10 Q-9 9 -13.5 19Z" fill="${o.hair}"/>`;
+ return `<g transform="translate(${x},${y}) scale(${s*o.flip},${s}) translate(0,-100)">
+  <rect x="-9" y="70" width="7" height="30" rx="3" fill="${o.pants}"/><rect x="2" y="70" width="7" height="30" rx="3" fill="${o.pants}"/>
+  <ellipse cx="-5.5" cy="100" rx="6" ry="2.6" fill="#222"/><ellipse cx="5.5" cy="100" rx="6" ry="2.6" fill="#222"/>
+  <path d="M-13 42 Q-19 54 -18 66" stroke="${o.shirt}" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="-18" cy="67" r="3.6" fill="${o.skin}"/>
+  ${armR}
+  <path d="M-15 74 L-15 48 Q-15 35 0 35 Q15 35 15 48 L15 74Z" fill="${o.shirt}"/>
+  <path d="M-5 35 L0 42 L5 35" fill="#fff" opacity=".85"/>
+  <rect x="-3.5" y="29" width="7" height="8" fill="${o.skin}"/>
+  <circle cx="0" cy="19" r="13" fill="${o.skin}"/>${hair}
+  <circle cx="-4.5" cy="20" r="1.5" fill="#2b2233"/><circle cx="4.5" cy="20" r="1.5" fill="#2b2233"/>
+  <path d="M-4 25 Q0 28.5 4 25" stroke="#8a4b3a" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <circle cx="-8" cy="24" r="2.2" fill="#f19c8b" opacity=".45"/><circle cx="8" cy="24" r="2.2" fill="#f19c8b" opacity=".45"/>
+ </g>`}
+const spark=(x,y,r,c)=>`<path d="M${x} ${y-r} Q${x} ${y} ${x+r} ${y} Q${x} ${y} ${x} ${y+r} Q${x} ${y} ${x-r} ${y} Q${x} ${y} ${x} ${y-r}Z" fill="${c||'#f6c851'}"/>`;
+const cloud=(x,y,s)=>`<g transform="translate(${x},${y}) scale(${s})" fill="#fff" opacity=".9"><circle cx="0" cy="0" r="14"/><circle cx="16" cy="-6" r="18"/><circle cx="34" cy="0" r="13"/><rect x="0" y="0" width="34" height="13"/></g>`;
+function bannerBg(id,h,c1,c2){return `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="1160" height="${h}" rx="18" fill="url(#${id})"/>`}
+
+/* 19-слайд: талқылау үстелі */
+(function(){const H=230;let s=`<svg viewBox="0 0 1160 ${H}" class="chart">`+bannerBg('g-dc',H,'#eaf1fb','#f3eefb');
+ s+=`<rect x="330" y="20" width="500" height="6" rx="3" fill="#c9d6ea"/><rect x="420" y="26" width="320" height="70" rx="8" fill="#fff" stroke="#c9d6ea" stroke-width="3"/><text x="580" y="56" text-anchor="middle" font-size="18" font-weight="800" fill="${C.navy}">Ой бөлісу</text><text x="580" y="80" text-anchor="middle" font-size="13" fill="${C.muted||'#5b6677'}">Ойлан → Жұптас → Бөліс</text>`;
+ const ppl=[[380,{shirt:C.coral,style:'long',hair:'#3a2a20'}],[480,{shirt:C.blue,style:'short',skin:'#e8b88c',raise:1}],[680,{shirt:C.gold,style:'bun'}],[780,{shirt:C.violet,style:'short',hair:'#4a3328',skin:'#e8b88c'}]];
+ ppl.forEach(([x,o])=>s+=P(x,H-14,.95,o));
+ s+=`<ellipse cx="580" cy="${H-46}" rx="290" ry="26" fill="#8a6a4a"/><ellipse cx="580" cy="${H-52}" rx="290" ry="26" fill="#b48a60"/><rect x="420" y="${H-46}" width="14" height="40" fill="#7a5a3a"/><rect x="726" y="${H-46}" width="14" height="40" fill="#7a5a3a"/>`;
+ s+=`<rect x="520" y="${H-66}" width="50" height="10" rx="2" fill="#fff" transform="rotate(-6 545 ${H-61})"/><rect x="590" y="${H-64}" width="46" height="9" rx="2" fill="${C.sky}"/><circle cx="660" cy="${H-58}" r="7" fill="${C.coral}"/>`;
+ const bub=(x,y,w,txt,c,tail)=>`<g><rect x="${x}" y="${y}" width="${w}" height="44" rx="14" fill="#fff" stroke="${c}" stroke-width="3"/><path d="M${x+tail} ${y+44} l8 14 l6 -14" fill="#fff" stroke="${c}" stroke-width="3" stroke-linejoin="round"/><rect x="${x+tail-2}" y="${y+40}" width="18" height="6" fill="#fff"/><text x="${x+w/2}" y="${y+28}" text-anchor="middle" font-size="15" font-weight="800" fill="${c}">${txt}</text></g>`;
+ s+=bub(150,40,150,'Неліктен?',C.coral,120)+bub(860,44,170,'Мысал келтірейін',C.violet,26)+bub(170,120,130,'Келісемін!',C.teal,110)+bub(880,124,150,'Дәлелің қандай?',C.blue,20);
+ s+=`<g transform="translate(70,90)"><circle r="30" fill="#fff6d6"/><path d="M-12 -6 a12 12 0 1 1 24 0 c0 8 -7 10 -7 18 h-10 c0 -8 -7 -10 -7 -18z" fill="${C.gold}"/><rect x="-6" y="14" width="12" height="6" rx="2" fill="${C.grey}"/></g>`;
+ s+=`<g transform="translate(1100,100)"><circle r="30" fill="#e7f5f3"/><text y="12" text-anchor="middle" font-size="34" font-weight="800" fill="${C.teal}">?</text></g>`;
+ $('bn-discuss').innerHTML=s+`</svg>`;})();
+
+/* 21-слайд: рефлексия */
+(function(){const H=210;let s=`<svg viewBox="0 0 1160 ${H}" class="chart">`+bannerBg('g-rf',H,'#fff7e6','#eaf4fd');
+ s+=`<defs><radialGradient id="glow"><stop offset="0" stop-color="#ffe38a"/><stop offset="1" stop-color="#ffe38a" stop-opacity="0"/></radialGradient></defs>`;
+ s+=`<circle cx="580" cy="96" r="96" fill="url(#glow)"/>${Array.from({length:12},(_,i)=>{const a=i*30*Math.PI/180;return `<line x1="${580+62*Math.cos(a)}" y1="${92+62*Math.sin(a)}" x2="${580+80*Math.cos(a)}" y2="${92+80*Math.sin(a)}" stroke="${C.gold}" stroke-width="4" stroke-linecap="round"/>`}).join('')}`;
+ s+=`<path d="M552 120 a40 40 0 1 1 56 0 c-8 8 -10 14 -10 24 h-36 c0 -10 -2 -16 -10 -24z" fill="#ffd54f" stroke="${C.gold}" stroke-width="3"/><path d="M570 120 q10 -26 20 0" stroke="#e08a00" stroke-width="3" fill="none"/><rect x="562" y="146" width="36" height="9" rx="3" fill="${C.grey}"/><rect x="565" y="157" width="30" height="9" rx="3" fill="#8996aa"/><path d="M572 168 h16 l-4 7 h-8z" fill="#5b6677"/>`;
+ s+=`<g transform="translate(150,30)"><rect width="150" height="160" rx="12" fill="#fff" stroke="#c9d6ea" stroke-width="3"/><rect x="50" y="-10" width="50" height="20" rx="6" fill="${C.navy}"/>${['3 ұғым','2 идея','1 сұрақ'].map((t,i)=>`<rect x="18" y="${28+i*42}" width="22" height="22" rx="5" fill="${[C.teal,C.blue,C.coral][i]}"/><path d="M23 ${39+i*42} l5 5 l9 -10" stroke="#fff" stroke-width="3" fill="none"/><text x="50" y="${45+i*42}" font-size="15" font-weight="800" fill="${C.navy}">${t}</text>`).join('')}</g>`;
+ s+=P(860,H-12,.95,{shirt:C.teal,raise:1,style:'long',hair:'#2b2233'})+P(960,H-12,.95,{shirt:C.coral,style:'short',skin:'#e8b88c'})+P(1050,H-12,.85,{shirt:C.violet,raise:1,style:'bun'});
+ s+=`<text x="380" y="70" font-size="40" font-weight="800" fill="${C.sky}" opacity=".6">?</text><text x="740" y="60" font-size="32" font-weight="800" fill="${C.violet}" opacity=".55">?</text><text x="420" y="170" font-size="28" font-weight="800" fill="${C.coral}" opacity=".5">!</text><text x="730" y="175" font-size="34" font-weight="800" fill="${C.teal}" opacity=".5">?</text>`;
+ s+=spark(470,110,9)+spark(690,130,7)+spark(800,40,8,C.coral);
+ $('bn-reflect').innerHTML=s+`</svg>`;})();
+
+/* 22-слайд: түлектер */
+(function(){const H=150;let s=`<svg viewBox="0 0 1160 ${H}" class="chart">`+bannerBg('g-gd',H,'#0f2a4a','#1f5fa8');
+ const cap=(x,y,r)=>`<g transform="translate(${x},${y}) rotate(${r})"><path d="M0 -10 l28 12 l-28 12 l-28 -12z" fill="#0a1d35" stroke="#fff" stroke-width="1.5"/><path d="M-14 6 v10 q14 8 28 0 v-10" fill="#0a1d35" stroke="#fff" stroke-width="1.5"/><path d="M22 4 v14" stroke="${C.gold}" stroke-width="2.5"/></g>`;
+ s+=cap(300,40,-20)+cap(560,26,12)+cap(860,38,-8);
+ for(let i=0;i<40;i++){const x=30+(i*137)%1100,y=22+(i*53)%80,c=[C.gold,C.coral,'#7fe0d8','#fff',C.sky][i%5];s+=`<rect x="${x}" y="${y}" width="7" height="12" rx="2" fill="${c}" transform="rotate(${i*31} ${x} ${y})" opacity=".85"/>`}
+ [[200,{shirt:C.teal,raise:1,style:'long'}],[420,{shirt:C.gold,raise:1,style:'short',skin:'#e8b88c'}],[640,{shirt:C.coral,raise:1,style:'bun'}],[860,{shirt:C.sky,raise:1,style:'short',hair:'#4a3328'}],[1000,{shirt:C.violet,style:'long',skin:'#e8b88c'}]].forEach(([x,o])=>s+=P(x,H-6,.72,o));
+ s+=`<text x="40" y="${H-60}" font-size="22" font-weight="800" fill="#fff">Білімді.</text><text x="40" y="${H-34}" font-size="22" font-weight="800" fill="#7fe0d8">Ізгі.</text><text x="40" y="${H-8}" font-size="22" font-weight="800" fill="${C.gold}">Бақытты.</text>`;
+ $('bn-grad').innerHTML=s+`</svg>`;})();
+
+/* ===================== ДИАГРАММАЛАР ===================== */
+function legend(id,items){$(id).innerHTML=items.map(([n,c])=>`<span><i style="background:${c}"></i>${n}</span>`).join('')}
+function barChart(id,cfg){const W=cfg.w||720,H=cfg.h||380,p={l:46,r:12,t:20,b:52},iw=W-p.l-p.r,ih=H-p.t-p.b,n=cfg.labels.length,m=cfg.series.length,gw=iw/n,bw=Math.min(46,gw*.75/m);
+ let s=`<svg viewBox="0 0 ${W} ${H}" class="chart">`;
+ for(let i=0;i<=5;i++){const v=cfg.max*i/5,y=p.t+ih-ih*i/5;s+=`<line x1="${p.l}" x2="${W-p.r}" y1="${y}" y2="${y}" class="gridl"/><text x="${p.l-8}" y="${y+4}" class="ax" text-anchor="end">${v}</text>`}
+ cfg.labels.forEach((L,i)=>{const cx=p.l+gw*(i+.5),tot=m*bw+(m-1)*6;L.split('\n').forEach((ln,k)=>s+=`<text x="${cx}" y="${H-p.b+20+k*15}" class="lbl" text-anchor="middle">${ln}</text>`);
+  cfg.series.forEach((se,j)=>{const v=se.values[i],h=ih*v/cfg.max,x=cx-tot/2+j*(bw+6),y=p.t+ih-h;s+=`<rect x="${x}" y="${y}" width="${bw}" height="${h}" rx="4" fill="${se.color}"><title>${se.name}: ${v}</title></rect><text x="${x+bw/2}" y="${y-5}" class="val" text-anchor="middle">${v}</text>`})});
+ $(id).innerHTML=s+`</svg>`;legend(cfg.legend,cfg.series.map(s=>[s.name,s.color]))}
+function lineChart(id,cfg){const W=cfg.w||560,H=cfg.h||290,p={l:42,r:40,t:18,b:36},iw=W-p.l-p.r,ih=H-p.t-p.b,n=cfg.labels.length;const X=i=>p.l+iw*i/(n-1),Y=v=>p.t+ih-ih*(v-cfg.min)/(cfg.max-cfg.min);
+ let s=`<svg viewBox="0 0 ${W} ${H}" class="chart">`;for(let i=0;i<=4;i++){const v=cfg.min+(cfg.max-cfg.min)*i/4,y=Y(v);s+=`<line x1="${p.l}" x2="${W-p.r}" y1="${y}" y2="${y}" class="gridl"/><text x="${p.l-8}" y="${y+4}" class="ax" text-anchor="end">${v}</text>`}
+ cfg.labels.forEach((L,i)=>s+=`<text x="${X(i)}" y="${H-12}" class="lbl" text-anchor="middle">${L}</text>`);
+ cfg.series.forEach(se=>{s+=`<polyline points="${se.values.map((v,i)=>X(i)+','+Y(v)).join(' ')}" fill="none" stroke="${se.color}" stroke-width="3.5" stroke-linejoin="round"/>`;se.values.forEach((v,i)=>s+=`<circle cx="${X(i)}" cy="${Y(v)}" r="5.5" fill="#fff" stroke="${se.color}" stroke-width="3"/><text x="${X(i)}" y="${se.below?Y(v)+20:Y(v)-11}" class="val" text-anchor="middle">${v}</text>`)});
+ $(id).innerHTML=s+`</svg>`;legend(cfg.legend,cfg.series.map(s=>[s.name,s.color]))}
+function radarChart(id,cfg){const W=560,H=430,cx=280,cy=220,R=160,n=cfg.axes.length;const pt=(i,v)=>{const a=-Math.PI/2+i*2*Math.PI/n,r=R*v/cfg.max;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]};
+ let s=`<svg viewBox="0 0 ${W} ${H}" class="chart">`;for(let k=1;k<=cfg.max;k++){s+=`<polygon points="${cfg.axes.map((_,i)=>pt(i,k).join(',')).join(' ')}" fill="none" stroke="#e3e8f0"/>`;s+=`<text x="${cx+4}" y="${cy-R*k/cfg.max+12}" class="ax">${k}</text>`}
+ cfg.axes.forEach((a,i)=>{const[x,y]=pt(i,cfg.max);s+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#e3e8f0"/>`;const[lx,ly]=pt(i,cfg.max*1.17);a.split('\n').forEach((ln,k)=>s+=`<text x="${lx}" y="${ly+k*15}" class="lbl" text-anchor="middle">${ln}</text>`)});
+ cfg.series.forEach(se=>{s+=`<polygon points="${se.values.map((v,i)=>pt(i,v).join(',')).join(' ')}" fill="${se.color}" fill-opacity=".16" stroke="${se.color}" stroke-width="3" ${se.dash?'stroke-dasharray="6 5"':''}/>`;se.values.forEach((v,i)=>{const[x,y]=pt(i,v);s+=`<circle cx="${x}" cy="${y}" r="4" fill="${se.color}"/>`})});
+ $(id).innerHTML=s+`</svg>`;legend(cfg.legend,cfg.series.map(s=>[s.name,s.color]))}
+function donut(id,lg,data){const W=260,cx=130,cy=130,R=110,r=64,tot=data.reduce((a,b)=>a+b[1],0);let a0=-Math.PI/2,s=`<svg viewBox="0 0 ${W} ${W}" class="chart">`;
+ data.forEach(([n,v,c])=>{const a1=a0+v/tot*2*Math.PI,L=a1-a0>Math.PI?1:0,p=(a,rr)=>[cx+rr*Math.cos(a),cy+rr*Math.sin(a)];const[x1,y1]=p(a0,R),[x2,y2]=p(a1,R),[x3,y3]=p(a1,r),[x4,y4]=p(a0,r);
+  s+=`<path d="M${x1} ${y1} A${R} ${R} 0 ${L} 1 ${x2} ${y2} L${x3} ${y3} A${r} ${r} 0 ${L} 0 ${x4} ${y4}z" fill="${c}" stroke="#fff" stroke-width="2"><title>${n}: ${v} сағ</title></path>`;a0=a1});
+ s+=`<text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="26" font-weight="800" fill="${C.navy}">24</text><text x="${cx}" y="${cy+18}" text-anchor="middle" font-size="12" fill="#5b6677">сағат</text>`;
+ $(id).innerHTML=s+`</svg>`;$(lg).innerHTML=data.map(([n,v,c])=>`<div style="display:flex;align-items:center;gap:8px;margin:5px 0"><i style="width:12px;height:12px;border-radius:3px;background:${c};flex:none"></i><span style="flex:1">${n}</span><b>${v}</b></div>`).join('')}
+
+
+/* ===================== ТИТУЛ: ОТБАСЫ ===================== */
+$('ill-title').innerHTML=`<svg viewBox="0 0 440 420" class="chart">
+ <circle cx="220" cy="215" r="190" fill="rgba(255,255,255,.06)"/><circle cx="220" cy="215" r="140" fill="rgba(255,255,255,.07)"/>
+ <path d="M70 330 V200 L220 90 L370 200 V330" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="6" stroke-linejoin="round"/>
+ <path d="M220 130 l10 20 22 3 -16 15 4 22 -20 -11 -20 11 4 -22 -16 -15 22 -3z" fill="#f6c851"/>
+ <circle cx="220" cy="160" r="46" fill="#f6c851" opacity=".18"/>
+ ${P(140,350,1.45,{shirt:C.blue,style:'short',hair:'#2b2233'})}
+ ${P(300,350,1.4,{shirt:C.coral,style:'long',hair:'#3a2a20',skin:'#e8b88c'})}
+ ${P(220,352,.95,{shirt:C.gold,style:'bun',raise:1})}
+ <rect x="60" y="352" width="320" height="6" rx="3" fill="rgba(255,255,255,.35)"/>
+ ${spark(80,120,10)}${spark(370,110,8,'#7fe0d8')}${spark(395,250,7)}${spark(50,260,6,'#7fe0d8')}
+</svg>`;
+$('ill-end').innerHTML=`<svg viewBox="0 0 420 380" class="chart">
+ <circle cx="210" cy="190" r="170" fill="rgba(255,255,255,.07)"/>
+ <path d="M210 300 C120 240 90 190 120 150 C150 110 200 130 210 160 C220 130 270 110 300 150 C330 190 300 240 210 300Z" fill="#e2614b" opacity=".9"/>
+ ${P(170,300,1.1,{shirt:C.blue,style:'long',hair:'#3a2a20'})}${P(250,300,.8,{shirt:C.gold,style:'short',raise:1})}
+ ${[[70,90],[350,110],[90,300],[340,300],[210,60]].map(([x,y])=>spark(x,y,10)).join('')}
+</svg>`;
+
+/* ===================== ЖОСПАР ===================== */
+$('ill-plan').innerHTML=`<svg viewBox="0 0 360 380" class="chart">${[['Кіріспе',5,C.blue],['Теория',17,C.teal],['Талқылау',8,C.gold],['Топтық жұмыс',15,C.coral],['Рефлексия',5,C.violet]].map(([t,m,c],i)=>`<g transform="translate(10,${18+i*70})"><rect width="${60+m*13}" height="50" rx="12" fill="${c}"/><text x="14" y="31" fill="#fff" font-size="15" font-weight="800">${t}</text><text x="${72+m*13}" y="31" font-size="14" font-weight="700" fill="${C.navy}">${m}′</text></g>`).join('')}</svg>`;
+
+/* ===================== 3-слайд: үй сахнасы ===================== */
+(function(){const H=200;let s=`<svg viewBox="0 0 1160 ${H}" class="chart">`+bannerBg('g-hm',H,'#1b3a66','#2d5f9a');
+ for(let i=0;i<26;i++){const x=(i*173)%1140+10,y=12+(i*37)%70;s+=`<circle cx="${x}" cy="${y}" r="${1+(i%3)}" fill="#fff" opacity="${.4+(i%3)*.2}"/>`}
+ s+=`<circle cx="1060" cy="50" r="26" fill="#fdf0c2"/><circle cx="1072" cy="44" r="24" fill="#2a5590"/>`;
+ s+=`<rect x="0" y="${H-26}" width="1160" height="26" fill="#203a5c"/>`;
+ // үй
+ s+=`<rect x="80" y="70" width="300" height="${H-96}" fill="#f5e6cf"/><polygon points="64,74 230,10 396,74" fill="${C.coral}"/>
+ <rect x="110" y="96" width="80" height="60" rx="4" fill="#ffd97a"/><path d="M150 96 v60 M110 126 h80" stroke="#c99a3a" stroke-width="3"/>
+ <rect x="270" y="96" width="80" height="60" rx="4" fill="#ffd97a"/><path d="M310 96 v60 M270 126 h80" stroke="#c99a3a" stroke-width="3"/>
+ <rect x="208" y="112" width="44" height="62" rx="4" fill="#8a5a3a"/><circle cx="244" cy="146" r="3" fill="#f6c851"/>`;
+ // отбасы мен телескоп
+ s+=P(560,H-26,.9,{shirt:C.blue,style:'short'})+P(640,H-26,.9,{shirt:C.violet,style:'long',hair:'#3a2a20',skin:'#e8b88c'});
+ s+=P(760,H-26,.6,{shirt:C.gold,style:'bun'});
+ s+=`<g transform="translate(790,${H-70})"><path d="M0 44 L14 0 L28 44 M14 0 V44" stroke="#c9d6ea" stroke-width="3"/><rect x="-8" y="-22" width="62" height="16" rx="6" fill="#e0e7f2" transform="rotate(-28 14 -14)"/><rect x="40" y="-46" width="12" height="20" rx="3" fill="${C.teal}" transform="rotate(-28 14 -14)"/></g>`;
+ s+=`<path d="M840 100 Q900 60 980 70" stroke="#ffe38a" stroke-width="2" stroke-dasharray="4 6" fill="none"/>`+spark(990,68,12)+spark(940,110,6,'#7fe0d8')+spark(470,60,8)+spark(700,40,6,'#7fe0d8');
+ s+=`<text x="1000" y="${H-70}" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">Отбасы —</text><text x="1000" y="${H-48}" text-anchor="middle" font-size="16" font-weight="800" fill="#7fe0d8">дарынның алғашқы мектебі</text>`;
+ $('bn-home').innerHTML=s+`</svg>`;})();
+
+/* ===================== 4-слайд: таразы ===================== */
+$('ill-scale').innerHTML=(function(){let s=`<svg viewBox="0 0 520 220" class="chart">`;
+ s+=`<rect x="250" y="40" width="20" height="150" rx="6" fill="${C.navy}"/><rect x="190" y="186" width="140" height="16" rx="8" fill="${C.navy}"/><circle cx="260" cy="40" r="12" fill="${C.gold}"/>
+ <line x1="80" y1="56" x2="440" y2="56" stroke="${C.navy}" stroke-width="6" stroke-linecap="round"/>
+ <path d="M80 56 L40 130 M80 56 L120 130 M440 56 L400 130 M440 56 L480 130" stroke="#8996aa" stroke-width="2"/>
+ <path d="M30 130 h100 q-6 26 -50 26 q-44 0 -50 -26z" fill="${C.sky}"/><path d="M390 130 h100 q-6 26 -50 26 q-44 0 -50 -26z" fill="${C.coral}"/>
+ <text x="80" y="182" text-anchor="middle" font-size="14" font-weight="800" fill="${C.blue}">Елемеу</text><text x="440" y="182" text-anchor="middle" font-size="14" font-weight="800" fill="${C.coral}">Қысым</text>
+ <rect x="190" y="2" width="140" height="26" rx="13" fill="${C.teal}"/><text x="260" y="20" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">Алтын орта</text>`;
+ return s+`</svg>`})();
+
+/* ===================== ГАНЬЕ ===================== */
+(function(){let s=`<svg viewBox="0 0 1160 330" class="chart"><defs><marker id="am" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto"><path d="M0 0 L12 6 L0 12z" fill="${C.navy}"/></marker></defs>`;
+ const box=(x,y,w,h,c,t,items)=>{let r=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="16" fill="#fff" stroke="${c}" stroke-width="3"/><rect x="${x}" y="${y}" width="${w}" height="40" rx="16" fill="${c}"/><rect x="${x}" y="${y+24}" width="${w}" height="16" fill="${c}"/><text x="${x+w/2}" y="${y+27}" text-anchor="middle" fill="#fff" font-size="15" font-weight="800">${t}</text>`;items.forEach((it,i)=>r+=`<text x="${x+18}" y="${y+64+i*22}" font-size="13.5" fill="${C.navy}">• ${it}</text>`);return r};
+ s+=box(0,90,270,170,C.blue,'ТАБИҒИ ҚАБІЛЕТ (Gift)',['зияткерлік','шығармашылық','әлеуметтік','перцептивтік','моторлық']);
+ s+=box(890,90,270,170,C.gold,'ТАЛАНТ (Talent)',['академиялық','өнер (музыка, бейнелеу)','спорт','техника, ғылым','басқару, кәсіпкерлік']);
+ s+=`<rect x="330" y="140" width="500" height="70" rx="35" fill="${C.teal}"/><text x="580" y="170" text-anchor="middle" fill="#fff" font-size="16" font-weight="800">ДАМУ ҮДЕРІСІ</text><text x="580" y="192" text-anchor="middle" fill="#fff" font-size="13">оқу · жүйелі жаттығу · тәжірибе · уақыт</text>`;
+ s+=`<line x1="272" y1="175" x2="326" y2="175" stroke="${C.navy}" stroke-width="3" marker-end="url(#am)"/><line x1="832" y1="175" x2="886" y2="175" stroke="${C.navy}" stroke-width="3" marker-end="url(#am)"/>`;
+ s+=`<rect x="340" y="0" width="480" height="78" rx="14" fill="#efeafb" stroke="${C.violet}" stroke-width="2"/><text x="580" y="26" text-anchor="middle" font-size="14" font-weight="800" fill="${C.violet}">ІШКІ КАТАЛИЗАТОРЛАР</text><text x="580" y="50" text-anchor="middle" font-size="13" fill="${C.navy}">мотивация · ерік · темперамент · мінез · өзін-өзі басқару</text><text x="580" y="68" text-anchor="middle" font-size="12" fill="#5b6677">(баланың өзіне тән)</text>`;
+ s+=`<rect x="340" y="250" width="480" height="78" rx="14" fill="#fdecea" stroke="${C.coral}" stroke-width="3"/><text x="580" y="276" text-anchor="middle" font-size="14" font-weight="800" fill="${C.coral}">ОРТАНЫҢ КАТАЛИЗАТОРЛАРЫ</text><text x="580" y="300" text-anchor="middle" font-size="14" fill="${C.navy}"><tspan font-weight="800" fill="${C.coral}">ОТБАСЫ</tspan> · мектеп · ұстаз · құрдастар · қоғам</text><text x="580" y="318" text-anchor="middle" font-size="12" fill="#5b6677">(баланың айналасы)</text>`;
+ s+=`<line x1="580" y1="80" x2="580" y2="136" stroke="${C.violet}" stroke-width="3" marker-end="url(#am)"/><line x1="580" y1="248" x2="580" y2="214" stroke="${C.coral}" stroke-width="3" marker-end="url(#am)"/>`;
+ s+=`<g transform="translate(1110,34)"><circle r="26" fill="#fff6d6" stroke="${C.gold}" stroke-width="2"/><rect x="-11" y="-11" width="22" height="22" rx="4" fill="#fff" stroke="${C.navy}" stroke-width="2"/><circle cx="-5" cy="-5" r="2.2" fill="${C.navy}"/><circle cx="5" cy="5" r="2.2" fill="${C.navy}"/><circle cx="5" cy="-5" r="2.2" fill="${C.navy}"/><circle cx="-5" cy="5" r="2.2" fill="${C.navy}"/></g><text x="1110" y="76" text-anchor="middle" font-size="12" font-weight="700" fill="${C.navy}">кездейсоқтық</text>`;
+ $('dmgt').innerHTML=s+`</svg>`;})();
+
+/* ===================== МЁНКС ===================== */
+(function(){let s=`<svg viewBox="0 0 520 470" class="chart">`;const A=[260,60],B=[50,400],Cc=[470,400];
+ s+=`<polygon points="${A} ${B} ${Cc}" fill="#f3f6fb" stroke="${C.navy}" stroke-width="3" stroke-linejoin="round"/>`;
+ s+=`<circle cx="220" cy="270" r="78" fill="${C.blue}" opacity=".5"/><circle cx="300" cy="270" r="78" fill="${C.teal}" opacity=".5"/><circle cx="260" cy="330" r="78" fill="${C.gold}" opacity=".5"/>`;
+ s+=`<text x="190" y="250" text-anchor="middle" font-size="13" font-weight="800" fill="${C.navy}">Қабілет</text><text x="330" y="250" text-anchor="middle" font-size="13" font-weight="800" fill="${C.navy}">Шығарма-</text><text x="330" y="266" text-anchor="middle" font-size="13" font-weight="800" fill="${C.navy}">шылық</text><text x="260" y="376" text-anchor="middle" font-size="13" font-weight="800" fill="${C.navy}">Мотивация</text>`;
+ s+=`<circle cx="260" cy="290" r="26" fill="#fff" stroke="${C.navy}" stroke-width="2"/><text x="260" y="294" text-anchor="middle" font-size="10.5" font-weight="800" fill="${C.navy}">ДАРЫН</text>`;
+ [[A,'ОТБАСЫ',C.coral,80,6],[B,'МЕКТЕП',C.blue,0,50],[Cc,'ҚҰРДАСТАР',C.teal,-24,50]].forEach(([[x,y],t,c,dx,dy])=>{s+=`<circle cx="${x}" cy="${y}" r="26" fill="${c}"/><text x="${x+dx}" y="${y+dy}" text-anchor="middle" font-size="16" font-weight="800" fill="${c}">${t}</text>`});
+ s+=`<g transform="translate(260,60)"><path d="M-12 4 L0 -8 L12 4 V14 H-12z" fill="#fff"/></g><g transform="translate(50,400)"><rect x="-11" y="-8" width="22" height="16" fill="#fff"/><path d="M-11 -8 L0 -16 L11 -8" fill="#fff"/></g><g transform="translate(470,400)"><circle cx="-6" cy="-4" r="5" fill="#fff"/><circle cx="6" cy="-4" r="5" fill="#fff"/><path d="M-14 10 q8 -10 16 0 M-2 10 q8 -10 16 0" fill="#fff"/></g>`;
+ $('monks').innerHTML=s+`</svg>`;})();
+
+/* ===================== ЕРЕКШЕЛІКТЕР ===================== */
+$('traits').innerHTML=[
+ ['Танымдық',C.blue,'<circle cx="24" cy="22" r="14" fill="none" stroke="currentColor" stroke-width="4"/><path d="M18 40 h12 M20 44 h8" stroke="currentColor" stroke-width="4"/>',['Ерте сөйлеу мен оқу','Үлкен сөздік қор, жақсы есте сақтау','Терең, көп сұрақ қою («Неге?»)','Абстрактілі ойлау']],
+ ['Шығармашылық',C.gold,'<path d="M24 4 l5 12 13 1 -10 8 3 13 -11 -7 -11 7 3 -13 -10 -8 13 -1z" fill="currentColor"/>',['Ерекше идеялар, қиял','Тәуекелге бару','Әзіл сезімінің дамуы','Стандарттан тыс шешім']],
+ ['Эмоционалдық',C.coral,'<path d="M24 40 L8 24 a9 9 0 0 1 16 -12 a9 9 0 0 1 16 12z" fill="currentColor"/>',['Жоғары сезімталдық','Әділеттілікке ерекше назар','Перфекционизмге бейімділік','Өзіне сыншылдық']],
+ ['Әлеуметтік',C.teal,'<circle cx="16" cy="16" r="7" fill="currentColor"/><circle cx="32" cy="16" r="7" fill="currentColor"/><path d="M4 40 q12 -20 24 0 M20 40 q12 -20 24 0" fill="currentColor"/>',['Үлкендермен араласуды қалау','Көшбасшылыққа ұмтылу','Құрдастарынан оқшаулану қаупі','Дербестікке ұмтылу']]
+].map(([t,c,ic,li])=>`<div class="card" style="border-top:5px solid ${c}"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><svg viewBox="0 0 48 48" width="40" height="40" style="color:${c}">${ic}</svg><h3 style="margin:0">${t}</h3></div><ul class="dots small">${li.map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('');
+
+/* ===================== ФУНКЦИЯЛАР ХАБЫ ===================== */
+(function(){const items=[['Эмоционалдық',C.coral],['Танымдық',C.blue],['Мотивациялық',C.gold],['Құндылықтық',C.violet],['Ұйымдастыру',C.teal],['Серіктестік',C.sky]];
+ let s=`<svg viewBox="0 0 560 470" class="chart" style="max-height:500px">`;const cx=280,cy=235,R=170;
+ items.forEach(([t,c],i)=>{const a=(-90+i*60)*Math.PI/180;s+=`<line x1="${cx}" y1="${cy}" x2="${cx+R*Math.cos(a)}" y2="${cy+R*Math.sin(a)}" stroke="${c}" stroke-width="3"/>`});
+ s+=`<circle cx="${cx}" cy="${cy}" r="82" fill="${C.navy}"/>`+P(cx-18,cy+46,.7,{shirt:C.coral,style:'long',hair:'#3a2a20'})+P(cx+22,cy+46,.48,{shirt:C.gold,style:'bun',raise:1})+`<text x="${cx}" y="${cy-48}" text-anchor="middle" fill="#9fd9d4" font-size="13" font-weight="700">ОТБАСЫ</text>`;
+ items.forEach(([t,c],i)=>{const a=(-90+i*60)*Math.PI/180,x=cx+R*Math.cos(a),y=cy+R*Math.sin(a);s+=`<circle cx="${x}" cy="${y}" r="56" fill="#fff" stroke="${c}" stroke-width="4"/><text x="${x}" y="${y+5}" text-anchor="middle" font-size="${t.length>11?12:13.5}" font-weight="800" fill="${C.navy}">${t}</text>`});
+ $('hub').innerHTML=s+`</svg>`;})();
+
+/* ===================== БЛУМ КЕЗЕҢДЕРІ ===================== */
+(function(){const ph=[
+ ['1-кезең · Ерте жылдар','«Романтика»: қызығу',C.teal,.55,['Ойын арқылы танысу, қуаныш','Ата-ана — ойын серігі, қызықтырушы','Алғашқы ұстаз — жылы, мейірімді','Табысты мақтау, мадақтау'],'5–10 жас'],
+ ['2-кезең · Орта жылдар','«Дәлдік»: жүйелі жұмыс',C.blue,.75,['Күнделікті жүйелі жаттығу','Ата-ана — ұйымдастырушы: уақыт, ресурс','Кәсіби деңгейдегі ұстаз','Нәтижеге емес, шеберлікке назар'],'10–15 жас'],
+ ['3-кезең · Кейінгі жылдар','«Шеберлік»: жеке стиль',C.violet,.95,['Өз жолын, стилін табу','Ата-ана — эмоционалдық тірек','Шебер-ұстаз, ұлттық/халықаралық деңгей','Дербес шешім мен жауапкершілік'],'15 жас және одан кейін']];
+ let s=`<svg viewBox="0 0 1160 330" class="chart"><defs><marker id="ab" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto"><path d="M0 0 L12 6 L0 12z" fill="${C.navy}"/></marker></defs>`;
+ ph.forEach(([t,sub,c,sc,li,age],i)=>{const x=i*395,w=370;s+=`<rect x="${x}" y="0" width="${w}" height="320" rx="16" fill="#fff" stroke="${c}" stroke-width="3"/><rect x="${x}" y="0" width="${w}" height="66" rx="16" fill="${c}"/><rect x="${x}" y="50" width="${w}" height="16" fill="${c}"/><text x="${x+20}" y="28" fill="#fff" font-size="16" font-weight="800">${t}</text><text x="${x+20}" y="50" fill="#fff" font-size="13.5">${sub} · ${age}</text>`;
+  li.forEach((l,k)=>s+=`<circle cx="${x+26}" cy="${96+k*34}" r="5" fill="${c}"/><text x="${x+40}" y="${101+k*34}" font-size="14" fill="${C.navy}">${l}</text>`);
+  s+=P(x+w-50,312,sc*.95,{shirt:c,style:i==1?'short':'long',raise:i==2?1:0});
+  if(i<2)s+=`<line x1="${x+w+2}" y1="160" x2="${x+w+22}" y2="160" stroke="${C.navy}" stroke-width="3" marker-end="url(#ab)"/>`});
+ $('bloom').innerHTML=s+`</svg>`;})();
+
+/* ===================== БАУМРИНД МАТРИЦАСЫ ===================== */
+(function(){let s=`<svg viewBox="0 0 520 460" class="chart"><defs><marker id="ax" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="${C.navy}"/></marker></defs>`;
+ const q=[[260,30,C.teal,'АВТОРИТЕТТІ','жылы + талапшыл','★ ең тиімді'],[60,30,C.coral,'АВТОРИТАРЛЫ','суық + талапшыл','қатаң бақылау'],[260,230,C.gold,'РҰҚСАТ БЕРУШІ','жылы + талапсыз','шекараның жоқтығы'],[60,230,C.violet,'НЕМҚҰРАЙЛЫ','суық + талапсыз','елемеу']];
+ q.forEach(([x,y,c,t,d,e])=>s+=`<rect x="${x}" y="${y}" width="196" height="192" rx="14" fill="${c}" opacity=".92"/><text x="${x+98}" y="${y+84}" text-anchor="middle" fill="#fff" font-size="16" font-weight="800">${t}</text><text x="${x+98}" y="${y+108}" text-anchor="middle" fill="#fff" font-size="13">${d}</text><text x="${x+98}" y="${y+132}" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">${e}</text>`);
+ s+=`<line x1="40" y1="440" x2="40" y2="20" stroke="${C.navy}" stroke-width="3" marker-end="url(#ax)"/><line x1="40" y1="440" x2="470" y2="440" stroke="${C.navy}" stroke-width="3" marker-end="url(#ax)"/>`;
+ s+=`<text transform="translate(24 230) rotate(-90)" text-anchor="middle" font-size="13" font-weight="800" fill="${C.navy}">ТАЛАПШЫЛДЫҚ (бақылау) ↑</text><text x="260" y="458" text-anchor="middle" font-size="13" font-weight="800" fill="${C.navy}">ЖЫЛЫЛЫҚ (қабылдау, қолдау) →</text>`;
+ $('baum').innerHTML=s+`</svg>`;})();
+
+/* ===================== ЙЕРКС-ДОДСОН ===================== */
+(function(){const W=700,H=400,p={l:60,r:20,t:30,b:60},iw=W-p.l-p.r,ih=H-p.t-p.b;let s=`<svg viewBox="0 0 ${W} ${H}" class="chart">`;
+ const z=[[0,.3,'#e7f0fb','Енжарлық аймағы'],[.3,.7,'#e2f5f2','Оңтайлы аймақ'],[.7,1,'#fdecea','Шамадан тыс қысым']];
+ z.forEach(([a,b,c,t],i)=>s+=`<rect x="${p.l+iw*a}" y="${p.t}" width="${iw*(b-a)}" height="${ih}" fill="${c}"/><text x="${p.l+iw*(a+b)/2}" y="${p.t+ih-12}" text-anchor="middle" font-size="13" font-weight="800" fill="${[C.blue,C.teal,C.coral][i]}">${t}</text>`);
+ let d='';for(let i=0;i<=100;i++){const x=i/100,y=Math.exp(-Math.pow((x-.5)/.22,2)/2);d+=(i?'L':'M')+(p.l+iw*x)+' '+(p.t+ih-ih*(.08+.8*y))}
+ s+=`<path d="${d}" fill="none" stroke="${C.navy}" stroke-width="4"/>`;
+ [[.12,'зерігу, қызығушылықтың жоқтығы',C.blue],[.5,'ынта, ағын (flow), даму',C.teal],[.86,'мазасыздық, burnout',C.coral]].forEach(([x,t,c])=>{const y=Math.exp(-Math.pow((x-.5)/.22,2)/2),X=p.l+iw*x,Y=p.t+ih-ih*(.08+.8*y);s+=`<circle cx="${X}" cy="${Y}" r="8" fill="#fff" stroke="${c}" stroke-width="4"/><text x="${x==.5?X:x<.5?X+14:X-14}" y="${x==.5?Y-16:Y+18}" text-anchor="${x==.5?'middle':x<.5?'start':'end'}" font-size="12.5" font-weight="700" fill="${c}">${t}</text>`});
+ s+=`<line x1="${p.l}" y1="${p.t+ih}" x2="${W-p.r}" y2="${p.t+ih}" stroke="${C.navy}" stroke-width="2"/><line x1="${p.l}" y1="${p.t}" x2="${p.l}" y2="${p.t+ih}" stroke="${C.navy}" stroke-width="2"/>`;
+ s+=`<text x="${p.l+iw/2}" y="${H-22}" text-anchor="middle" font-size="14" font-weight="800" fill="${C.navy}">Ата-ананың күтуі мен қысымы →</text><text x="${p.l}" y="${H-38}" font-size="12" fill="#5b6677">төмен</text><text x="${W-p.r}" y="${H-38}" text-anchor="end" font-size="12" fill="#5b6677">жоғары</text>`;
+ s+=`<text transform="translate(26 ${p.t+ih/2}) rotate(-90)" text-anchor="middle" font-size="14" font-weight="800" fill="${C.navy}">Баланың мотивациясы мен нәтижесі →</text>`;
+ $('yd').innerHTML=s+`</svg>`;})();
+
+/* ===================== МАҚТАУ ИЛЛЮСТРАЦИЯСЫ ===================== */
+$('ill-praise').innerHTML=`<svg viewBox="0 0 420 200" class="chart"><rect width="420" height="200" rx="16" fill="#eef8f6"/>
+ ${P(130,188,1.05,{shirt:C.violet,style:'long',hair:'#3a2a20'})}${P(250,188,.75,{shirt:C.gold,style:'short',raise:1})}
+ <rect x="170" y="18" width="230" height="56" rx="16" fill="#fff" stroke="${C.teal}" stroke-width="3"/><path d="M190 74 l-8 16 l22 -16" fill="#fff" stroke="${C.teal}" stroke-width="3" stroke-linejoin="round"/><rect x="186" y="70" width="20" height="6" fill="#fff"/>
+ <text x="285" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="${C.teal}">Қалай шештің?</text><text x="285" y="62" text-anchor="middle" font-size="13" fill="${C.navy}">Көрсетші!</text>
+ ${spark(330,120,10)}${spark(370,150,7,C.coral)}</svg>`;
+
+/* ===================== КИІЗ ҮЙ БАННЕРІ ===================== */
+(function(){const H=200;let s=`<svg viewBox="0 0 1160 ${H}" class="chart">`+bannerBg('g-yt',H,'#fff3dc','#e4f3ff');
+ s+=`<path d="M0 ${H-36} Q300 ${H-70} 600 ${H-40} T1160 ${H-50} V${H} H0Z" fill="#d9ecc2"/><path d="M0 ${H-20} Q400 ${H-44} 800 ${H-22} T1160 ${H-24} V${H} H0Z" fill="#c4e0a8"/>`;
+ s+=`<circle cx="1070" cy="54" r="26" fill="#f6c851"/>`+cloud(120,40,.9)+cloud(860,36,.7);
+ const yx=330,yb=H-24;
+ s+=`<path d="M${yx-150} ${yb} V${yb-80} Q${yx} ${yb-170} ${yx+150} ${yb-80} V${yb}Z" fill="#f8f1e4" stroke="#b08a5a" stroke-width="3"/>
+ <path d="M${yx-150} ${yb-80} Q${yx} ${yb-170} ${yx+150} ${yb-80}" fill="none" stroke="${C.coral}" stroke-width="8"/>
+ ${Array.from({length:12},(_,i)=>`<path d="M${yx-150+i*25} ${yb} l25 -70 M${yx-125+i*25} ${yb} l-25 -70" stroke="#d9c39f" stroke-width="2"/>`).join('')}
+ <rect x="${yx-150}" y="${yb-84}" width="300" height="14" fill="${C.coral}"/>${Array.from({length:10},(_,i)=>`<path d="M${yx-140+i*30} ${yb-77} q7 -8 14 0 q7 8 14 0" stroke="${C.gold}" stroke-width="2.5" fill="none"/>`).join('')}
+ <ellipse cx="${yx}" cy="${yb-152}" rx="26" ry="8" fill="#b08a5a"/><path d="M${yx-26} ${yb-152} h52" stroke="#7a5a3a" stroke-width="3"/>
+ <path d="M${yx-28} ${yb} V${yb-56} Q${yx} ${yb-72} ${yx+28} ${yb-56} V${yb}Z" fill="${C.coral}"/><path d="M${yx-20} ${yb-6} V${yb-50} Q${yx} ${yb-62} ${yx+20} ${yb-50} V${yb-6}" fill="none" stroke="${C.gold}" stroke-width="2.5"/>`;
+ s+=P(600,yb,.95,{shirt:'#8a4b6e',style:'bun',hair:'#e8e8e8',skin:'#e8b88c'})+`<path d="M582 ${yb-90} q18 -14 36 0" stroke="#fff" stroke-width="6" fill="none"/>`;
+ s+=P(680,yb,.62,{shirt:C.teal,style:'short',raise:1});
+ s+=`<g transform="translate(760,${yb-120})"><rect width="300" height="64" rx="16" fill="#fff" stroke="${C.gold}" stroke-width="3"/><path d="M14 64 l-14 18 l30 -18" fill="#fff" stroke="${C.gold}" stroke-width="3" stroke-linejoin="round"/><rect x="10" y="60" width="26" height="6" fill="#fff"/><text x="150" y="28" text-anchor="middle" font-size="15" font-weight="800" fill="${C.navy}">«Ұяда не көрсең,</text><text x="150" y="50" text-anchor="middle" font-size="15" font-weight="800" fill="${C.navy}">ұшқанда соны ілесің»</text></g>`;
+ s+=spark(520,60,8)+spark(960,140,7,C.coral);
+ $('bn-yurt').innerHTML=s+`</svg>`;})();
+
+/* ===================== ДЕРЕКТЕР / ГРАФИКТЕР ===================== */
+barChart('ch-async',{legend:'lg-async',max:15,w:720,h:400,labels:['Зияткерлік','Оқу\nдағдысы','Эмоционалдық','Әлеуметтік','Физикалық\n(моторика)'],series:[{name:'Даму деңгейіне сәйкес келетін жас (жыл)',color:C.blue,values:[12,11,8,7,8]}]});
+(function(){const svg=$('ch-async').querySelector('svg');const y=20+(400-20-52)*(1-8/15);svg.insertAdjacentHTML('beforeend',`<line x1="46" x2="708" y1="${y}" y2="${y}" stroke="${C.coral}" stroke-width="3" stroke-dasharray="8 6"/>`);$('lg-async').insertAdjacentHTML('beforeend',`<span><i style="background:${C.coral};height:3px;vertical-align:3px"></i>Хронологиялық жасы — 8 жас</span>`);
+ svg.querySelectorAll('rect[fill="'+C.blue+'"]').forEach((r,i)=>r.setAttribute('fill',[C.blue,C.sky,C.coral,C.teal,C.gold][i]))})();
+radarChart('ch-radar',{legend:'lg-radar',max:5,axes:['Эмоционалдық\nқолдау','Танымдық\nорта','Дербестікке\nерік беру','Талаптың\nорындылығы','Мектеппен\nсеріктестік','Демалыс\nтеңгерімі'],series:[
+ {name:'«А» отбасы — теңгерімді',color:C.teal,values:[4.5,4.2,4.3,4.0,3.8,4.2]},{name:'«Б» отбасы — қысымды',color:C.coral,values:[2.6,4.7,1.8,1.9,3.0,1.7],dash:1}]});
+donut('ch-donut','lg-donut',[['Ұйқы',70,C.navy],['Мектеп',30,C.blue],['Үй тапсырмасы',7,C.sky],['Үйірмелер (2–3)',6,C.violet],['Еркін ойын',10,C.gold],['Отбасымен уақыт',10,C.coral],['Спорт, серуен',5,C.teal],['Тамақ, гигиена, жол',30,'#c7cfdb']]);
+$('ch-donut').querySelector('svg').querySelectorAll('text')[0].textContent='168';
+
+/* ===================== ЖАДЫНАМА ===================== */
+const RULES=['Баланы басқалармен емес, кешегі өзімен салыстырыңыз.','Нәтижені емес, еңбекті, тәсілді, табандылықты мақтаңыз.','Қызығушылығын бақылап, үйірмені баламен бірге таңдаңыз.','Үйде кітап, ойын, эксперимент ортасын жасаңыз.','Сұрақтарына шыдамдылықпен жауап беріп, жауапты бірге іздеңіз.','Қателесуге рұқсат етіңіз — бұл үйренудің бөлігі.','Еркін ойын мен демалыс уақытын қорғаңыз.','Эмоциясын тыңдап, сезімін атауға үйретіңіз.','Мұғаліммен және мектеппен тұрақты байланыста болыңыз.','Өзіңіз үздіксіз оқитын, жаңалыққа ашық үлгі болыңыз.'];
+const rh=(i)=>`<div class="rule"><b class="n">${i+1}</b><p>${RULES[i]}</p></div>`;
+$('rules1').innerHTML=[0,1,2,3,4].map(rh).join('');$('rules2').innerHTML=[5,6,7,8,9].map(rh).join('');
+$('ill-rules').innerHTML=`<svg viewBox="0 0 300 380" class="chart"><rect width="300" height="380" rx="18" fill="#eaf4fd"/>
+ <circle cx="150" cy="150" r="110" fill="#fff" opacity=".7"/>
+ ${P(110,300,1.5,{shirt:C.blue,style:'short'})}${P(190,300,1.05,{shirt:C.gold,style:'bun'})}
+ <g transform="translate(150,236)"><path d="M-44 0 l44 -10 l44 10 v34 l-44 -10 l-44 10z" fill="${C.coral}"/><path d="M0 -10 v34" stroke="#fff" stroke-width="2"/></g>
+ <path d="M150 64 C130 44 104 58 112 80 C118 96 150 110 150 110 C150 110 182 96 188 80 C196 58 170 44 150 64Z" fill="${C.coral}"/>
+ <rect x="0" y="300" width="300" height="80" rx="0" fill="#d6e7f7"/><rect x="0" y="360" width="300" height="20" rx="0" fill="#d6e7f7"/>
+ <text x="150" y="340" text-anchor="middle" font-size="15" font-weight="800" fill="${C.navy}">Бірге оқимыз,</text><text x="150" y="360" text-anchor="middle" font-size="15" font-weight="800" fill="${C.teal}">бірге өсеміз</text>
+ ${spark(40,60,10)}${spark(260,90,8,C.teal)}</svg>`;
+
+/* ===================== ӨЗІН-ӨЗІ ТЕКСЕРУ ===================== */
+$('quiz').innerHTML=[
+ ['Ганье моделінде табиғи қабілеттің талантқа айналуына әсер ететін сыртқы катализаторлар?','Орта: отбасы, мектеп, ұстаз, құрдастар, қоғам (және кездейсоқтық).',C.blue],
+ ['Мёнкс Рензулли моделіне қандай үш әлеуметтік факторды қосты?','Отбасы, мектеп және құрдастар.',C.teal],
+ ['Асинхронды даму дегеніміз не?','Зияткерлік, эмоционалдық, әлеуметтік және физикалық дамудың біркелкі емес қарқыны.',C.gold],
+ ['Баумринд бойынша дарынды бала үшін ең тиімді тәрбие стилі?','Авторитетті стиль: жоғары жылылық пен орынды талаптың үйлесімі.',C.violet],
+ ['Мюллер мен Дуэк зерттеуі бойынша баланы қалай мақтаған дұрыс?','Қабілетін емес — еңбегін, тәсілін, табандылығын мақтау.',C.coral],
+ ['Б. Блум (1985) талант дамуында ата-ана рөлінің қалай өзгеретінін көрсетті?','Ойын серігі → ұйымдастырушы → эмоционалдық тірек (үш кезең).',C.sky]
+].map(([q,a,c],i)=>`<div class="card qz" style="border-top:4px solid ${c}" onclick="this.classList.toggle('open')"><h3 style="font-size:15.5px">${i+1}. ${q}</h3><div class="hint">▸ жауабын көру</div><div class="ans">${a}</div></div>`).join('');
+
+/* ===================== ӘДЕБИЕТТЕР ===================== */
+const REFS=['Қазақстан Республикасының «Білім туралы» Заңы. 2007 жылғы 27 шілдедегі №319-III.',
+ 'Жарықбаев Қ., Қалиев С. Қазақ тәлім-тәрбиесі. — Алматы: Санат, 1995.',
+ 'Рабочая концепция одарённости / под ред. Д.Б. Богоявленской, В.Д. Шадрикова. — 2-е изд. — М., 2003.',
+ 'Савенков А.И. Одарённые дети в детском саду и школе. — М.: Академия, 2000.',
+ 'Лейтес Н.С. Возрастная одарённость школьников. — М.: Академия, 2001.',
+ 'Теплов Б.М. Избранные труды: в 2 т. — М.: Педагогика, 1985.',
+ 'Эйдемиллер Э.Г., Юстицкис В. Психология и психотерапия семьи. — СПб.: Питер, 1999.',
+ 'Bloom B.S. (Ed.) Developing Talent in Young People. — New York: Ballantine Books, 1985.',
+ 'Baumrind D. Current patterns of parental authority // Developmental Psychology Monographs. — 1971. — 4(1, Pt. 2).',
+ 'Bronfenbrenner U. The Ecology of Human Development. — Harvard University Press, 1979.',
+ 'Gagné F. Transforming gifts into talents: the DMGT as a developmental theory // High Ability Studies. — 2004. — 15(2). — P. 119–147.',
+ 'Gardner H. Frames of Mind. — New York: Basic Books, 1983.',
+ 'Mueller C.M., Dweck C.S. Praise for intelligence can undermine children’s motivation and performance // JPSP. — 1998. — 75(1). — P. 33–52.',
+ 'Renzulli J.S. What makes giftedness? // Phi Delta Kappan. — 1978. — 60(3). — P. 180–184.',
+ 'Silverman L.K. Giftedness 101. — New York: Springer, 2013.',
+ 'Epstein J.L. et al. School, Family, and Community Partnerships. — Corwin Press, 2002.'];
+const rf=x=>`<li style="font-size:13.5px;margin-bottom:7px">${x}</li>`;
+$('refs1').innerHTML=REFS.slice(0,8).map(rf).join('');$('refs2').innerHTML=REFS.slice(8).map(rf).join('');
+
+/* ===================== НАВИГАЦИЯ ===================== */
+const slides=[...document.querySelectorAll('.slide')];let cur=0;
+function fit(){const s=Math.min((innerWidth-16)/1280,(innerHeight-44)/720);$('deck').style.transform=`scale(${s})`}
+function go(i){cur=Math.max(0,Math.min(slides.length-1,i));slides.forEach((s,k)=>s.classList.toggle('active',k===cur));$('cnt').textContent=`${cur+1} / ${slides.length}`;$('bar').style.width=`${(cur+1)/slides.length*100}%`;history.replaceState(null,'','#'+(cur+1))}
+addEventListener('resize',fit);
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();go(cur+1)}else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();go(cur-1)}else if(e.key==='Home')go(0);else if(e.key==='End')go(slides.length-1);else if(e.key.toLowerCase()==='f'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}else if(e.key.toLowerCase()==='p')print()});
+$('next').onclick=()=>go(cur+1);$('prev').onclick=()=>go(cur-1);
+let tx=null;addEventListener('touchstart',e=>tx=e.touches[0].clientX);addEventListener('touchend',e=>{if(tx==null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)go(cur+(d<0?1:-1));tx=null});
+fit();go((parseInt(location.hash.slice(1))||1)-1);
+
+
+</script>
+</body>
+</html>
