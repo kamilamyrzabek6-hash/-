@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>БИЛ: академиялық және тұлғалық даму</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0f2a4a; --blue:#1f5fa8; --sky:#3d8fd6; --teal:#14a39a; --gold:#e0a526;
+  --coral:#e2614b; --violet:#7b5cc4; --ink:#1c2533; --muted:#5b6677; --line:#dfe5ee;
+  --bg:#f5f7fb; --card:#ffffff; --soft:#eef3fa;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0b1626;font-family:Inter,"Segoe UI",Arial,sans-serif;color:var(--ink);overflow:hidden}
+#stage{position:fixed;left:0;right:0;top:0;bottom:36px;display:flex;align-items:center;justify-content:center}
+#hub svg{max-height:500px}
+#deck{width:1280px;height:720px;position:relative;transform-origin:center center;flex:none}
+.slide{position:absolute;inset:0;background:var(--bg);display:none;padding:46px 60px 40px;overflow:hidden;border-radius:6px}
+.slide.active{display:block;animation:fade .45s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.slide::before{content:"";position:absolute;left:0;top:0;width:100%;height:6px;background:linear-gradient(90deg,var(--navy),var(--blue),var(--teal),var(--gold))}
+.foot{position:absolute;left:60px;right:60px;bottom:14px;display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.kicker{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+h1{font-size:44px;line-height:1.12;font-weight:800;color:var(--navy)}
+h2{font-size:32px;line-height:1.15;font-weight:800;color:var(--navy);margin-bottom:18px}
+h3{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:6px}
+p,li{font-size:16px;line-height:1.45}
+ul.dots{list-style:none}
+ul.dots li{position:relative;padding-left:20px;margin-bottom:7px}
+ul.dots li::before{content:"";position:absolute;left:2px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--teal)}
+ol.num{counter-reset:n;list-style:none}
+ol.num li{counter-increment:n;position:relative;padding-left:34px;margin-bottom:8px}
+ol.num li::before{content:counter(n);position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.g64{grid-template-columns:1.5fr 1fr}.g46{grid-template-columns:1fr 1.4fr}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:0 2px 6px rgba(15,42,74,.05)}
+.card.accent{border-top:4px solid var(--teal)}
+.card.blue{border-top:4px solid var(--blue)}.card.gold{border-top:4px solid var(--gold)}.card.coral{border-top:4px solid var(--coral)}.card.violet{border-top:4px solid var(--violet)}
+.small{font-size:13.5px;line-height:1.4}
+.xs{font-size:12px;color:var(--muted)}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--blue);margin-right:6px}
+table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th{background:var(--navy);color:#fff;font-size:13.5px;text-align:left;padding:9px 11px;font-weight:700}
+td{font-size:13.5px;line-height:1.38;padding:8px 11px;border-top:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#f8fafd}
+td b{color:var(--navy)}
+.num-c{text-align:center;font-variant-numeric:tabular-nums}
+.callout{background:linear-gradient(135deg,#e8f6f5,#eaf1fb);border-left:5px solid var(--teal);border-radius:10px;padding:12px 16px}
+.chart{width:100%;height:auto;display:block;font-family:Inter,Arial,sans-serif}
+.chart .gridl{stroke:#e3e8f0;stroke-width:1}
+.chart .ax{fill:#6b7585;font-size:12px}
+.chart .lbl{fill:#1c2533;font-size:12.5px;font-weight:600}
+.chart .val{fill:#1c2533;font-size:11.5px;font-weight:700}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;margin:4px 0 6px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+/* title slide */
+.title-slide{background:radial-gradient(circle at 85% 20%,#1f5fa8 0,#0f2a4a 55%,#0a1d35 100%);color:#fff}
+.title-slide h1{color:#fff;font-size:46px}
+.title-slide .kicker{color:#7fe0d8}
+.title-slide .meta{margin-top:34px;display:grid;grid-template-columns:170px 1fr;gap:8px 16px;font-size:16px;color:#d6e3f3}
+.title-slide .meta b{color:#fff;font-weight:600}
+.title-slide .foot{color:#9fb3cc}
+/* toc */
+.toc{display:grid;grid-template-columns:1fr 1fr;gap:12px 26px}
+.toc div{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 14px}
+.toc span{flex:none;width:38px;height:38px;border-radius:10px;background:var(--navy);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.toc p{font-size:15.5px;font-weight:600}
+/* timeline */
+.tl{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:8px}
+.tl::before{content:"";position:absolute;left:4%;right:4%;top:26px;height:4px;background:linear-gradient(90deg,var(--blue),var(--teal),var(--gold));border-radius:2px}
+.tl .st{position:relative;text-align:center}
+.tl .yr{position:relative;z-index:1;display:inline-block;background:#fff;border:3px solid var(--blue);color:var(--navy);font-weight:800;border-radius:999px;padding:9px 14px;font-size:15px}
+.tl .st p{font-size:13.5px;margin-top:10px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px}
+/* swot */
+.swot{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.swot .q{border-radius:14px;padding:14px 16px;color:#fff}
+.swot .q h3{color:#fff;display:flex;align-items:center;gap:8px}
+.swot .q li{font-size:14px;margin-bottom:4px}
+.swot .S{background:linear-gradient(135deg,#14a39a,#0e7f78)}
+.swot .W{background:linear-gradient(135deg,#e2614b,#bd4734)}
+.swot .O{background:linear-gradient(135deg,#1f5fa8,#164a85)}
+.swot .T{background:linear-gradient(135deg,#7b5cc4,#5d43a0)}
+.swot ul{padding-left:18px}
+/* stages */
+.stages{display:grid;grid-template-columns:repeat(3,1fr);gap:0;align-items:stretch}
+.stage{position:relative;background:#fff;border:1px solid var(--line);padding:16px 26px 16px 34px;clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%,8% 50%)}
+.stage:first-child{clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%);padding-left:20px}
+.stage h3{font-size:17px}
+.stage .ph{font-size:12px;font-weight:700;color:var(--teal);letter-spacing:.08em;text-transform:uppercase}
+/* nav */
+#ui{position:fixed;right:18px;bottom:6px;display:flex;gap:8px;align-items:center;z-index:5;font-size:13px;color:#cfdbea}
+#ui button{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;width:36px;height:32px;font-size:16px;cursor:pointer}
+#ui button:hover{background:rgba(255,255,255,.25)}
+#bar{position:fixed;left:0;bottom:0;height:4px;background:var(--gold);transition:width .3s;z-index:5}
+#help{position:fixed;left:18px;bottom:10px;font-size:12px;color:#8fa3bd;z-index:5}
+.note{position:absolute;left:60px;bottom:34px;font-size:11.5px;color:var(--muted);font-style:italic}
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{overflow:visible;background:#fff;height:auto}
+  #stage{position:static;display:block}
+  #deck{transform:none!important;width:1280px;height:auto}
+  .slide{display:block!important;position:relative;width:1280px;height:720px;page-break-after:always;break-after:page;border-radius:0;animation:none}
+  #ui,#bar,#help{display:none}
+}
+</style>
+</head>
+<body>
+<div id="stage"><div id="deck">
+
+<!-- 1. ТИТУЛ -->
+<section class="slide title-slide">
+  <div class="grid" style="grid-template-columns:1.25fr 1fr;align-items:center;height:100%">
+    <div>
+      <div class="kicker">Магистрлік диссертациялық зерттеу · 7M01101 — Педагогика және психология</div>
+      <h1>Білім-инновация лицейлеріндегі оқушылардың академиялық және тұлғалық дамуы</h1>
+      <p style="margin-top:16px;font-size:18px;color:#cfe0f3">Кіріктірілген педагогикалық модельді теориялық негіздеу және эксперименттік тексеру</p>
+      <div class="meta">
+        <span>Орындаған:</span><b>магистрант [Аты-жөні]</b>
+        <span>Ғылыми жетекші:</span><b>[ғылыми дәрежесі, атағы, аты-жөні]</b>
+        <span>Ұйым:</span><b>[Жоғары оқу орнының атауы], [кафедра]</b>
+      </div>
+    </div>
+    <div id="ill-title"></div>
+  </div>
+  <div class="foot"><span>[Қала] — 2026</span><span>1</span></div>
+</section>
+
+<!-- 2. МАЗМҰНЫ -->
+<section class="slide">
+  <div class="kicker">Құрылымы</div>
+  <h2>Баяндаманың мазмұны</h2>
+  <div class="toc">
+    <div><span>01</span><p>Зерттеудің өзектілігі және ғылыми аппараты</p></div>
+    <div><span>06</span><p>Академиялық және тұлғалық дамудың құрылымы</p></div>
+    <div><span>02</span><p>Негізгі ұғымдар және теориялық-әдіснамалық негіздер</p></div>
+    <div><span>07</span><p>Кіріктірілген педагогикалық модель және шарттар</p></div>
+    <div><span>03</span><p>Білім-инновация лицейлерінің даму тарихы</p></div>
+    <div><span>08</span><p>Педагогикалық эксперимент: дизайны мен нәтижелері</p></div>
+    <div><span>04</span><p>БИЛ білім беру моделінің ерекшеліктері</p></div>
+    <div><span>09</span><p>SWOT-талдау, тиімді тәжірибелер, ұсыныстар</p></div>
+    <div><span>05</span><p>Басқа мектеп типтерімен салыстырмалы талдау</p></div>
+    <div><span>10</span><p>Қорытынды және пайдаланылған әдебиеттер</p></div>
+  </div>
+  <div class="foot"><span>БИЛ: академиялық және тұлғалық даму</span><span>2</span></div>
+</section>
+
+<!-- 3. ӨЗЕКТІЛІГІ -->
+<section class="slide">
+  <div class="kicker">01 · Өзектілігі</div>
+  <h2>Неліктен бұл тақырып маңызды?</h2>
+  <div class="grid g3">
+    <div class="card blue"><h3>Мемлекеттік саясат</h3>
+      <p class="small">ҚР мектепке дейінгі, орта білім беруді дамытудың 2023–2029 жылдарға арналған тұжырымдамасы (ҚР Үкіметінің 2023 ж. 28 наурыздағы №249 қаулысы) сапалы білім мен тұлғаның үйлесімді дамуын басым мақсат етеді. «Біртұтас тәрбие» бағдарламасы (2023) оқыту мен тәрбиенің бірлігін талап етеді.</p></div>
+    <div class="card accent"><h3>Халықаралық үрдіс</h3>
+      <p class="small">OECD Learning Compass 2030 білімнің, дағдының, құндылықтар мен көзқарастардың тұтастығын алға тартады. PISA зерттеулері академиялық нәтиже мен оқушының әл-ауқаты, мотивациясы, өзіне сенімі арасында тығыз байланыс бар екенін көрсетеді.</p></div>
+    <div class="card gold"><h3>Практика қажеттілігі</h3>
+      <p class="small">БИЛ — олимпиадалық және ҰБТ нәтижелері жоғары, іріктеу негізінде жұмыс істейтін, көбіне интернат режиміндегі мектептер. Қарқынды академиялық жүктеме жағдайында оқушының эмоционалдық әл-ауқаты мен тұлғалық өсуін қамтамасыз ету — ерекше педагогикалық міндет.</p></div>
+  </div>
+  <div class="callout" style="margin-top:18px">
+    <h3>Зерттеу шешетін қайшылықтар</h3>
+    <ol class="num" style="margin-top:8px">
+      <li class="small">жоғары академиялық нәтижеге бағдарланған қарқынды оқыту мен оқушының тұлғалық-эмоционалдық әл-ауқатын сақтау қажеттілігі арасында;</li>
+      <li class="small">БИЛ-де жинақталған бай практикалық тәжірибе мен оның ғылыми-теориялық тұрғыда жеткіліксіз жүйеленуі арасында;</li>
+      <li class="small">академиялық және тұлғалық дамуды кешенді диагностикалау қажеттілігі мен біріктірілген өлшеу құралдарының тапшылығы арасында.</li>
+    </ol>
+  </div>
+  <div class="foot"><span>Зерттеу мәселесі: БИЛ жағдайында академиялық және тұлғалық дамуды кіріктірудің педагогикалық шарттары қандай?</span><span>3</span></div>
+</section>
+
+<!-- 4. ҒЫЛЫМИ АППАРАТ -->
+<section class="slide">
+  <div class="kicker">01 · Ғылыми аппарат</div>
+  <h2>Зерттеудің ғылыми аппараты</h2>
+  <div class="grid g2">
+    <div class="grid" style="gap:12px">
+      <div class="card blue"><h3>Мақсаты</h3><p class="small">БИЛ оқушыларының академиялық және тұлғалық дамуын кіріктіре қамтамасыз етудің педагогикалық моделін теориялық тұрғыда негіздеу және оның тиімділігін эксперимент арқылы тексеру.</p></div>
+      <div class="grid g2" style="gap:12px">
+        <div class="card"><h3>Объектісі</h3><p class="small">Білім-инновация лицейлеріндегі білім беру үдерісі.</p></div>
+        <div class="card"><h3>Пәні</h3><p class="small">БИЛ оқушыларының академиялық және тұлғалық дамуын кіріктіру үдерісі.</p></div>
+      </div>
+      <div class="card gold"><h3>Ғылыми болжамы</h3><p class="small"><b>Егер</b> академиялық және тәрбие жұмысы біртұтас модель негізінде ұйымдастырылса, тьюторлық-менторлық қолдау енгізілсе, өзін-өзі реттеу мен рефлексияны дамытатын белсенді әдістер жүйелі қолданылса және мониторинг кешенді жүргізілсе, <b>онда</b> оқушылардың академиялық жетістіктері артып, тұлғалық сапалары үйлесімді қалыптасады, ал оқу мазасыздығы төмендейді.</p></div>
+    </div>
+    <div class="grid" style="gap:12px">
+      <div class="card accent"><h3>Міндеттері</h3>
+        <ol class="num">
+          <li class="small">«академиялық даму» және «тұлғалық даму» ұғымдарының мәні мен құрылымын нақтылау;</li>
+          <li class="small">БИЛ білім беру моделінің ерекшеліктерін талдау;</li>
+          <li class="small">кіріктірілген педагогикалық модель мен оны жүзеге асырудың шарттарын әзірлеу;</li>
+          <li class="small">модельдің тиімділігін эксперимент арқылы тексеріп, әдістемелік ұсыныстар беру.</li>
+        </ol></div>
+      <div class="card violet"><h3>Әдістері</h3>
+        <p class="small"><span class="tag">Теориялық</span>талдау, синтез, салыстыру, жүйелеу, модельдеу<br>
+        <span class="tag">Эмпирикалық</span>сауалнама, тестілеу, бақылау, сұхбат, педагогикалық эксперимент<br>
+        <span class="tag">Статистикалық</span>Стьюдент t-критерийі, χ², Пирсон корреляциясы, Cohen d (SPSS / JASP)</p></div>
+      <div class="card"><h3>Зерттеу базасы</h3><p class="small">[Қала] Білім-инновация лицейі: 8–10 сынып оқушылары <b>n = 240</b> (ЭТ = 120, БТ = 120), 36 педагог, 60 ата-ана.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>ЭТ — эксперименттік топ · БТ — бақылау тобы</span><span>4</span></div>
+</section>
+
+<!-- 5. ЖАҢАЛЫҒЫ -->
+<section class="slide">
+  <div class="kicker">01 · Нәтижелердің құндылығы</div>
+  <h2>Ғылыми жаңалығы мен маңыздылығы</h2>
+  <div class="grid g3">
+    <div class="card blue"><h3>Ғылыми жаңалығы</h3>
+      <ul class="dots small">
+        <li>«академиялық-тұлғалық даму» кіріктірілген ұғымы нақтыланып, оның құрылымы (когнитивтік, мотивациялық, рефлексивтік, құндылықтық компоненттер) айқындалды;</li>
+        <li>БИЛ жағдайына бейімделген төрт блокты (мақсаттық, мазмұндық, технологиялық, диагностикалық-нәтижелік) модель әзірленді;</li>
+        <li>академиялық және тұлғалық дамудың критерийлері, көрсеткіштері және деңгейлері жүйеленді.</li>
+      </ul></div>
+    <div class="card accent"><h3>Теориялық маңыздылығы</h3>
+      <ul class="dots small">
+        <li>дарынды оқушылар педагогикасы мен тұлғаға бағдарланған білім беру теориясы инновациялық лицей контекстіндегі деректермен толықтырылды;</li>
+        <li>оқыту мен тәрбиенің бірлігі қағидасы өзін-өзі реттеу теориясы тұрғысынан негізделді.</li>
+      </ul></div>
+    <div class="card gold"><h3>Практикалық маңыздылығы</h3>
+      <ul class="dots small">
+        <li>кураторларға арналған «Мен және болашағым» бағдарламасы (36 сағат) әзірленді;</li>
+        <li>диагностикалық құралдар пакеті мен мониторинг картасы ұсынылды;</li>
+        <li>нәтижелер БИЛ, НЗМ, мамандандырылған мектептер мен педагогтердің біліктілігін арттыру курстарында қолданыла алады.</li>
+      </ul></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3>Қорғауға ұсынылатын тұжырымдар</h3>
+    <ol class="num" style="margin-top:6px">
+      <li class="small">Академиялық және тұлғалық даму — бір-бірін өзара шарттайтын үдерістер: оқу мотивациясы мен өзін-өзі реттеу олардың ортақ «өзегі» болып табылады.</li>
+      <li class="small">БИЛ-дің интернат режимі, кураторлық жүйесі және ата-анамен серіктестігі кіріктірілген дамудың ерекше ресурсы болып саналады.</li>
+      <li class="small">Ұсынылған модель педагогикалық шарттар сақталғанда академиялық нәтижені арттырып, мазасыздықты статистикалық маңызды деңгейде төмендетеді.</li>
+    </ol>
+  </div>
+  <div class="foot"><span>БИЛ: академиялық және тұлғалық даму</span><span>5</span></div>
+</section>
+
+<!-- 6. ҰҒЫМДАР -->
+<section class="slide">
+  <div class="kicker">02 · Ұғымдық аппарат</div>
+  <h2>Зерттеудің негізгі ұғымдары</h2>
+  <table>
+    <tr><th style="width:22%">Ұғым</th><th>Зерттеудегі жұмыс анықтамасы</th><th style="width:22%">Тірек авторлар</th></tr>
+    <tr><td><b>Академиялық даму</b></td><td>Оқушының пәндік білімін, танымдық қабілеттерін, оқу мотивациясын және өзін-өзі реттеу дағдыларын жүйелі түрде жетілдіру үдерісі мен нәтижесі.</td><td>Л.С. Выготский, Дж. Хэтти, Б. Циммерман</td></tr>
+    <tr><td><b>Тұлғалық даму</b></td><td>Құндылықтық бағдарлардың, эмоционалдық-ерік сапаларының, әлеуметтік құзыреттер мен субъектілік позицияның сапалық өзгерісі.</td><td>А.Н. Леонтьев, А. Маслоу, Қ. Жарықбаев</td></tr>
+    <tr><td><b>Инновациялық лицей</b></td><td>Тереңдетілген бейіндік оқытуды, авторлық бағдарламалар мен жаңа білім беру технологияларын жүзеге асыратын, іріктеу негізінде жұмыс істейтін орта білім беру ұйымы.</td><td>ҚР «Білім туралы» Заңы (2007)</td></tr>
+    <tr><td><b>Дарындылық</b></td><td>Орташадан жоғары қабілеттің, шығармашылықтың және тапсырмаға берілгендіктің тоғысуы (үш сақиналы модель).</td><td>Дж. Рензулли, Г. Гарднер</td></tr>
+    <tr><td><b>Өзін-өзі реттеу (SRL)</b></td><td>Мақсат қою → жоспарлау → өзін-өзі бақылау → рефлексия циклі арқылы оқу әрекетін саналы басқару.</td><td>Б. Циммерман, П. Пинтрич</td></tr>
+    <tr><td><b>Кіріктіру</b></td><td>Академиялық және тәрбиелік мақсаттарды, мазмұнды, әдістер мен бағалауды біртұтас жүйеге біріктіру.</td><td>Ш. Таубаева, Н.Д. Хмель</td></tr>
+  </table>
+  <div class="foot"><span>Ұғымдар зерттеудің операционалдық негізін құрайды</span><span>6</span></div>
+</section>
+
+<!-- 7. ТЕОРИЯЛАР -->
+<section class="slide">
+  <div class="kicker">02 · Әдіснама</div>
+  <h2>Теориялық-әдіснамалық негіздер</h2>
+  <table>
+    <tr><th style="width:24%">Теория / тәсіл</th><th>Негізгі идеясы</th><th style="width:36%">Зерттеуде қолданылуы</th></tr>
+    <tr><td><b>Мәдени-тарихи теория</b><br><span class="xs">Л.С. Выготский</span></td><td>Даму ересекпен бірлескен әрекетте «жақын даму аймағында» жүзеге асады.</td><td>Менторлық және саралап оқыту, олимпиадалық дайындықтағы «тірек» (scaffolding).</td></tr>
+    <tr><td><b>Іс-әрекеттік тәсіл</b><br><span class="xs">А.Н. Леонтьев</span></td><td>Тұлға іс-әрекет пен оның мотивтері арқылы қалыптасады.</td><td>Жобалық және зерттеушілік жұмыстарды тұлғалық мағынамен байланыстыру.</td></tr>
+    <tr><td><b>Өзін-өзі детерминациялау</b><br><span class="xs">E. Deci, R. Ryan</span></td><td>Ішкі мотивация автономия, құзыреттілік және байланыстылық қажеттіліктері қанағаттанғанда өседі.</td><td>Таңдау еркіндігі, табысты сезіну жағдаяттары, қауіпсіз сынып климаты.</td></tr>
+    <tr><td><b>Үш сақиналы модель</b><br><span class="xs">J. Renzulli</span></td><td>Дарындылық — қабілет, шығармашылық, берілгендік тоғысы.</td><td>Дарындыларды тек олимпиадамен емес, шығармашылық әрі тұлғалық тұрғыда дамыту.</td></tr>
+    <tr><td><b>Экологиялық жүйелер</b><br><span class="xs">U. Bronfenbrenner</span></td><td>Баланың дамуына отбасы, мектеп, қоғам жүйелері бірге әсер етеді.</td><td>Лицей – отбасы – қоғам серіктестігі, интернат ортасын ұйымдастыру.</td></tr>
+    <tr><td><b>Ұлттық педагогика</b><br><span class="xs">М. Жұмабаев, Ж. Аймауытов</span></td><td>Тәрбиенің мақсаты — білімді, ізгі, ұлтжанды тұлға.</td><td>Құндылықтық компонент: «Адал азамат», ұлттық бірегейлік.</td></tr>
+  </table>
+  <div class="foot"><span>Тұлғаға бағдарланған, іс-әрекеттік, жүйелік және құзыреттілік тәсілдердің кірігуі</span><span>7</span></div>
+</section>
+
+<!-- 8. ТАРИХ -->
+<section class="slide">
+  <div class="kicker">03 · Тарихи даму</div>
+  <h2>Білім-инновация лицейлерінің қалыптасу кезеңдері</h2>
+  <div class="tl">
+    <div class="st"><span class="yr">1992</span><p>Қазақстан мен Түркия арасындағы білім беру ынтымақтастығы негізінде алғашқы қазақ-түрік лицейлері ашылды.</p></div>
+    <div class="st"><span class="yr">1990-жж.</span><p>Лицейлер желісі облыс орталықтарына кеңейді; жаратылыстану-математикалық бейін мен көптілді оқыту қалыптасты.</p></div>
+    <div class="st"><span class="yr">2000–2015</span><p>Халықаралық және республикалық олимпиадалардағы жүйелі жетістіктер; интернат пен кураторлық жүйенің дамуы.</p></div>
+    <div class="st"><span class="yr">2016</span><p>Лицейлер «Білім-инновация» лицейлері болып қайта аталып, толықтай отандық басқаруға көшті.</p></div>
+    <div class="st"><span class="yr">2020-жж.</span><p>STEM, робототехника, жобалық оқыту; жаңартылған білім мазмұны және цифрлық трансформация.</p></div>
+  </div>
+  <div class="grid g64" style="margin-top:20px;align-items:center">
+    <div class="callout">
+      <h3>Тарихи талдаудың тұжырымы</h3>
+      <p class="small">Отыз жылдан астам кезеңде БИЛ «олимпиадалық мектеп» моделінен академиялық жетістік пен тұлғалық тәрбиені қатар ұстайтын <b>кешенді инновациялық білім беру ортасына</b> қарай эволюциялады. Дегенмен тәрбиелік тәжірибенің басым бөлігі дәстүр ретінде беріліп келеді және ғылыми жүйелеуді қажет етеді — бұл зерттеудің тарихи негіздемесі.</p>
+    </div>
+    <div id="ill-building"></div>
+  </div>
+  <div class="foot"><span>Дереккөз: БИЛ ресми материалдары, ашық баспасөз жарияланымдары негізінде жалпыланды</span><span>8</span></div>
+</section>
+
+<!-- 9. БИЛ МОДЕЛІ -->
+<section class="slide">
+  <div class="kicker">04 · Білім беру ортасы</div>
+  <h2>БИЛ білім беру моделінің құрылымдық ерекшеліктері</h2>
+  <div class="grid g64" style="align-items:center">
+    <div id="hub"></div>
+    <div class="grid" style="gap:10px">
+      <div class="card blue"><h3>Академиялық ядро</h3><p class="small">Математика, физика, химия, биология, информатика пәндерін тереңдетіп оқыту; STEM пәндерін ағылшын тілінде оқыту элементтері; олимпиадалық резерв.</p></div>
+      <div class="card accent"><h3>Тәрбиелік ядро</h3><p class="small">Кураторлық (сынып жетекшісі + тәрбиеші) жүйе, жатақханадағы күн тәртібі, ата-анамен жүйелі кездесулер және отбасына бару дәстүрі.</p></div>
+      <div class="card gold"><h3>Біріктіруші механизм</h3><p class="small">Ортақ құндылықтар, педагог үлгісі, кешкі өзіндік дайындық («этюд»), құрдастар арасындағы өзара көмек.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Модель академиялық және тұлғалық дамуды бір ортада ұштастыруға мүмкіндік береді</span><span>9</span></div>
+</section>
+
+<!-- 10. САЛЫСТЫРУ -->
+<section class="slide">
+  <div class="kicker">05 · Салыстырмалы талдау</div>
+  <h2>БИЛ, НЗМ және жалпы білім беретін мектеп</h2>
+  <table>
+    <tr><th style="width:21%">Критерий</th><th>Білім-инновация лицейі</th><th>Назарбаев Зияткерлік мектебі</th><th>Жалпы білім беретін мектеп</th></tr>
+    <tr><td><b>Оқушыларды қабылдау</b></td><td>Конкурстық іріктеу емтиханы</td><td>Конкурстық іріктеу</td><td>Тұрғылықты жері бойынша</td></tr>
+    <tr><td><b>Бейіні</b></td><td>Жаратылыстану-математикалық, STEM</td><td>Жаратылыстану-математикалық, IB/авторлық бағдарламалар</td><td>Жалпы білім, 10–11 сыныпта бейіндік бағыт</td></tr>
+    <tr><td><b>Оқыту тілі</b></td><td>Қазақ/орыс + ағылшын (STEM элементтері)</td><td>Үштілді оқыту</td><td>Қазақ/орыс, ағылшын — пән ретінде</td></tr>
+    <tr><td><b>Тұру режимі</b></td><td>Интернат басым</td><td>Интернат бар</td><td>Күндізгі</td></tr>
+    <tr><td><b>Тәрбие жүйесі</b></td><td>Кураторлық, отбасымен тығыз байланыс</td><td>Тьюторлық, кураторлық</td><td>Сынып жетекшісі</td></tr>
+    <tr><td><b>Олимпиадалық дайындық</b></td><td>Жүйелі, жеке бағдарламамен</td><td>Жүйелі</td><td>Оқушының қызығушылығына қарай</td></tr>
+    <tr><td><b>Негізгі тәуекел</b></td><td>Академиялық жүктеме мен күйзеліс</td><td>Жоғары бәсекелестік</td><td>Ресурс пен мотивацияның әркелкілігі</td></tr>
+  </table>
+  <p class="xs" style="margin-top:10px">Кесте ресми ақпараттар негізінде жалпыланған сипаттама ретінде берілген; жекелеген мектептерде айырмашылықтар болуы мүмкін.</p>
+  <div class="foot"><span>Салыстыру БИЛ-дің кіріктірілген даму үшін ресурстары мен тәуекелдерін айқындайды</span><span>10</span></div>
+</section>
+
+<!-- 11. АКАДЕМИЯЛЫҚ ДАМУ -->
+<section class="slide">
+  <div class="kicker">06 · Академиялық даму</div>
+  <h2>Академиялық дамудың құрылымы</h2>
+  <div class="grid g2" style="align-items:center">
+    <div id="pyramid"></div>
+    <div>
+      <div class="card blue" style="margin-bottom:12px">
+        <h3>Өзін-өзі реттеу циклі (Б. Циммерман, 2002)</h3>
+        <div id="cycle"></div>
+      </div>
+      <div class="callout"><p class="small"><b>Түйін:</b> академиялық даму тек білім көлемімен өлшенбейді. Оның «қозғаушы күші» — мотивация, ал «басқару жүйесі» — өзін-өзі реттеу. Сондықтан модельде бұл екеуі тұлғалық дамумен ортақ буын ретінде қарастырылады.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Пирамида: төменгі деңгей жоғарғыларына негіз болады</span><span>11</span></div>
+</section>
+
+<!-- 12. ТҰЛҒАЛЫҚ ДАМУ -->
+<section class="slide">
+  <div class="kicker">06 · Тұлғалық даму</div>
+  <h2>Тұлғалық дамудың компоненттері</h2>
+  <div class="grid g3" id="pers-cards"></div>
+  <div class="callout" style="margin-top:16px"><p class="small"><b>Неге дәл осы алты компонент?</b> Олар «Біртұтас тәрбие» бағдарламасының құндылықтарымен, OECD әлеуметтік-эмоционалдық дағдылар жіктемесімен және жасөспірім жасының негізгі даму міндеттерімен (бірегейлік, автономия, өзін-өзі анықтау) сәйкес келеді әрі валидті әдістемелер арқылы өлшенеді.</p></div>
+  <div class="foot"><span>Тұлғалық даму — құндылықтардан мінез-құлыққа дейінгі тұтас жүйе</span><span>12</span></div>
+</section>
+
+<!-- 13. МОДЕЛЬ -->
+<section class="slide">
+  <div class="kicker">07 · Педагогикалық модель</div>
+  <h2>Академиялық және тұлғалық дамуды кіріктірудің моделі</h2>
+  <div id="model"></div>
+  <div class="foot"><span>Модель жүйелік тәсіл негізінде құрылды: әр блок келесісін анықтайды, нәтиже кері байланыс арқылы мақсатқа оралады</span><span>13</span></div>
+</section>
+
+<!-- 14. ШАРТТАР + VENN -->
+<section class="slide">
+  <div class="kicker">07 · Педагогикалық шарттар</div>
+  <h2>Модельдің тиімділігін қамтамасыз ететін шарттар</h2>
+  <div class="grid g46" style="align-items:center">
+    <div id="venn"></div>
+    <div class="grid" style="gap:10px">
+      <div class="card blue"><h3>1. Оқыту мен тәрбиенің бірлігі</h3><p class="small">Әр сабақтың пәндік мақсатымен қатар тұлғалық (құндылықтық) мақсаты болады; тәрбие сағаттары оқу мазмұнымен байланыстырылады.</p></div>
+      <div class="card accent"><h3>2. Тьюторлық-менторлық қолдау</h3><p class="small">Әр оқушыда жеке даму траекториясы; жоғары сынып оқушылары кіші сыныптарға тәлімгер болады.</p></div>
+      <div class="card gold"><h3>3. Психологиялық қауіпсіз орта</h3><p class="small">Қателікке рұқсат беретін бағалау мәдениеті, күйзелісті басқару тренингтері, жүктеме мен демалыс теңгерімі.</p></div>
+      <div class="card violet"><h3>4. Лицей – отбасы серіктестігі</h3><p class="small">Ата-аналармен тоқсан сайынғы даму кеңестері, ортақ мақсат пен бірыңғай талаптар.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Шарттардың әрқайсысы гипотезадағы бір элементке сәйкес келеді</span><span>14</span></div>
+</section>
+
+<!-- 15. ДИАГНОСТИКА -->
+<section class="slide">
+  <div class="kicker">08 · Диагностикалық құралдар</div>
+  <h2>Критерийлер, көрсеткіштер және әдістемелер</h2>
+  <table>
+    <tr><th style="width:16%">Критерий</th><th style="width:30%">Көрсеткіштер</th><th style="width:30%">Диагностикалық әдістеме</th><th>Деңгейлер</th></tr>
+    <tr><td><b>Когнитивтік</b></td><td>Пәндік үлгерім, функционалдық сауаттылық</td><td>Тоқсандық GPA, PISA үлгісіндегі тапсырмалар, олимпиада нәтижелері</td><td rowspan="6" class="small"><b style="color:#14a39a">Жоғары</b> — көрсеткіштер тұрақты, оқушы дербес әрекет етеді<br><br><b style="color:#1f5fa8">Орта</b> — көрсеткіштер жағдаятқа тәуелді, қолдау қажет<br><br><b style="color:#e2614b">Төмен</b> — көрсеткіштер әлсіз, жүйелі педагогикалық көмек қажет</td></tr>
+    <tr><td><b>Мотивациялық</b></td><td>Ішкі оқу мотивациясы, танымдық қызығушылық</td><td>М.Р. Гинзбург «Оқу мотивациясын зерттеу» әдістемесі</td></tr>
+    <tr><td><b>Реттеушілік</b></td><td>Жоспарлау, өзін-өзі бақылау, уақытты басқару</td><td>MSLQ (P. Pintrich және т.б., 1991)</td></tr>
+    <tr><td><b>Эмоционалдық</b></td><td>Эмоционалдық интеллект, мектеп мазасыздығы</td><td>Д.В. Люсин «ЭмИн»; Филлипс мектеп мазасыздығы тесті</td></tr>
+    <tr><td><b>Құндылықтық</b></td><td>Құндылықтық бағдарлар, азаматтық белсенділік</td><td>Ш. Шварц құндылықтар сауалнамасы (PVQ)</td></tr>
+    <tr><td><b>Рефлексивтік</b></td><td>Өзін-өзі бағалау адекваттылығы, рефлексия</td><td>Дембо–Рубинштейн әдістемесі, рефлексивтік эссе</td></tr>
+  </table>
+  <div class="foot"><span>Валидтілігі дәлелденген әдістемелер жиынтығы сенімді нәтиже береді</span><span>15</span></div>
+</section>
+
+<!-- 16. ЭКСПЕРИМЕНТ -->
+<section class="slide">
+  <div class="kicker">08 · Эксперимент дизайны</div>
+  <h2>Педагогикалық эксперименттің кезеңдері</h2>
+  <div class="stages">
+    <div class="stage"><div class="ph">1-кезең · 2024–2025 о.ж.</div><h3>Анықтаушы</h3><p class="small">Бастапқы деңгейді өлшеу, ЭТ және БТ эквиваленттілігін тексеру (t-тест: p &gt; 0,05), мәселелерді айқындау.</p></div>
+    <div class="stage"><div class="ph">2-кезең · 2025 ақпан – 2026 ақпан</div><h3>Қалыптастырушы</h3><p class="small">ЭТ-та модельді енгізу: «Мен және болашағым» курсы, менторлық, жобалық апталар, рефлексивтік портфолио.</p></div>
+    <div class="stage"><div class="ph">3-кезең · 2026 наурыз–сәуір</div><h3>Бақылаушы</h3><p class="small">Қайталама диагностика, статистикалық өңдеу, нәтижелерді түсіндіру және ұсыныстар.</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:18px;align-items:center">
+    <div id="sample"></div>
+    <div class="card">
+      <h3>Іріктеме сипаттамасы</h3>
+      <table style="margin-top:6px">
+        <tr><th>Топ</th><th class="num-c">n</th><th class="num-c">Ұл / Қыз</th><th>Сыныптар</th></tr>
+        <tr><td>Эксперименттік (ЭТ)</td><td class="num-c">120</td><td class="num-c">64 / 56</td><td>8А, 8Ә, 9А, 9Ә, 10А</td></tr>
+        <tr><td>Бақылау (БТ)</td><td class="num-c">120</td><td class="num-c">62 / 58</td><td>8Б, 8В, 9Б, 9В, 10Б</td></tr>
+        <tr><td>Педагогтер</td><td class="num-c">36</td><td class="num-c">—</td><td>пән мұғалімдері, кураторлар</td></tr>
+        <tr><td>Ата-аналар</td><td class="num-c">60</td><td class="num-c">—</td><td>сауалнама, фокус-топ</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="foot"><span>Квази-эксперимент: «ЭТ/БТ, алдын ала және кейінгі өлшеу» дизайны</span><span>16</span></div>
+</section>
+
+<!-- 17. АКАДЕМИЯЛЫҚ НӘТИЖЕ -->
+<section class="slide">
+  <div class="kicker">08 · Нәтижелер</div>
+  <h2>Академиялық даму деңгейлерінің динамикасы, %</h2>
+  <div class="grid g64">
+    <div class="card"><div class="legend" id="lg-levels"></div><div id="ch-levels"></div></div>
+    <div class="grid" style="gap:12px;align-content:start">
+      <div class="card accent"><h3>ЭТ: жоғары деңгей</h3><p style="font-size:38px;font-weight:800;color:var(--teal)">25 → 45%</p><p class="small">+20 пайыздық тармақ</p></div>
+      <div class="card coral"><h3>ЭТ: төмен деңгей</h3><p style="font-size:38px;font-weight:800;color:var(--coral)">24 → 9%</p><p class="small">−15 пайыздық тармақ</p></div>
+      <div class="card"><p class="small"><b>Пирсон χ²</b> (ЭТ, эксперимент соңы): χ² = 11,8; df = 2; <b>p &lt; 0,01</b>. БТ-дағы өзгеріс маңызды емес (p &gt; 0,05). Демек, өзгеріс модель әсерімен түсіндіріледі.</p></div>
+    </div>
+  </div>
+  <div class="note">* Деректер пилоттық зерттеу үлгісі ретінде берілген; диссертацияда нақты эксперимент нәтижелерімен ауыстырылады.</div>
+  <div class="foot"><span>Академиялық даму — когнитивтік, мотивациялық, реттеушілік критерийлердің жиынтық көрсеткіші</span><span>17</span></div>
+</section>
+
+<!-- 18. ТҰЛҒАЛЫҚ НӘТИЖЕ -->
+<section class="slide">
+  <div class="kicker">08 · Нәтижелер</div>
+  <h2>Тұлғалық сапалардың өзгерісі (1–5 балдық шкала)</h2>
+  <div class="grid g2" style="align-items:center">
+    <div class="card"><div class="legend" id="lg-radar"></div><div id="ch-radar"></div></div>
+    <div>
+      <table id="tb-radar"></table>
+      <div class="callout" style="margin-top:12px"><p class="small"><b>Түсіндірме:</b> ең үлкен өсім <b>рефлексия</b> (+1,0) мен <b>эмоционалдық интеллектте</b> (+0,9) байқалды. Бұл рефлексивтік портфолио мен күйзелісті басқару тренингтерінің тікелей әсері. БТ-да өзгерістер шамалы (+0,1…+0,2), бұл табиғи жас ерекшелік динамикасына сәйкес.</p></div>
+    </div>
+  </div>
+  <div class="note">* Деректер пилоттық зерттеу үлгісі ретінде берілген.</div>
+  <div class="foot"><span>Радар диаграмма алты компоненттің теңгерімді өсуін көрсетеді</span><span>18</span></div>
+</section>
+
+<!-- 19. СТАТИСТИКА -->
+<section class="slide">
+  <div class="kicker">08 · Статистикалық дәлелдеу</div>
+  <h2>Топтар арасындағы айырмашылықтың маңыздылығы</h2>
+  <div class="grid g2">
+    <div>
+      <table>
+        <tr><th>Көрсеткіш (эксп. соңы)</th><th class="num-c">ЭТ M ± SD</th><th class="num-c">БТ M ± SD</th><th class="num-c">t (238)</th><th class="num-c">p</th><th class="num-c">d</th></tr>
+        <tr><td>Оқу мотивациясы</td><td class="num-c">38,4 ± 5,1</td><td class="num-c">33,2 ± 5,6</td><td class="num-c">7,52</td><td class="num-c">&lt;0,001</td><td class="num-c">0,97</td></tr>
+        <tr><td>Өзін-өзі реттеу (MSLQ)</td><td class="num-c">5,12 ± 0,84</td><td class="num-c">4,61 ± 0,91</td><td class="num-c">4,51</td><td class="num-c">&lt;0,001</td><td class="num-c">0,58</td></tr>
+        <tr><td>Эмоционалдық интеллект</td><td class="num-c">82,6 ± 10,4</td><td class="num-c">76,9 ± 11,2</td><td class="num-c">4,09</td><td class="num-c">&lt;0,001</td><td class="num-c">0,53</td></tr>
+        <tr><td>Мектеп мазасыздығы, %</td><td class="num-c">38,2 ± 9,7</td><td class="num-c">47,5 ± 10,3</td><td class="num-c">−7,20</td><td class="num-c">&lt;0,001</td><td class="num-c">0,93</td></tr>
+      </table>
+      <div class="callout" style="margin-top:12px"><p class="small"><b>Қалай оқимыз?</b> p &lt; 0,05 — айырмашылық кездейсоқ емес. Cohen d: 0,2 — аз, 0,5 — орташа, 0,8 — үлкен әсер. Мотивация мен мазасыздық бойынша әсер <b>үлкен</b>, өзін-өзі реттеу мен ЭИ бойынша <b>орташа</b>.</p></div>
+    </div>
+    <div class="card"><h3>Оқу мотивациясы мен GPA байланысы (ЭТ, n = 40 кездейсоқ таңдама)</h3><div id="ch-scatter"></div></div>
+  </div>
+  <div class="note">* Деректер пилоттық зерттеу үлгісі ретінде берілген.</div>
+  <div class="foot"><span>Мотивацияның өсуі академиялық үлгеріммен оң корреляцияда — тұлғалық және академиялық даму өзара байланысты</span><span>19</span></div>
+</section>
+
+<!-- 20. ӘЛ-АУҚАТ -->
+<section class="slide">
+  <div class="kicker">08 · Әл-ауқат</div>
+  <h2>Уақыт теңгерімі және оқу мазасыздығы</h2>
+  <div class="grid g2">
+    <div class="card"><h3>Интернаттағы оқушының тәулігі (ұсынылған режим, сағ)</h3><div class="grid" style="grid-template-columns:1fr 1fr;align-items:center"><div id="ch-donut"></div><div id="lg-donut" class="small"></div></div></div>
+    <div class="card"><h3>Мектеп мазасыздығының жоғары деңгейі, % (тоқсандар бойынша)</h3><div class="legend" id="lg-line"></div><div id="ch-line"></div></div>
+  </div>
+  <div class="callout" style="margin-top:14px"><p class="small"><b>Неге бұл маңызды?</b> Ұйқы (8 сағ) мен белсенді демалыстың сақталуы когнитивтік өнімділікті арттырады. ЭТ-та күн режимі қайта құрылып, кешкі өзіндік дайындыққа рефлексия минуттары қосылғаннан кейін мазасыздық 58%-дан 38%-ға төмендеді, ал БТ-да өзгеріс байқалмады.</p></div>
+  <div class="note">* Деректер пилоттық зерттеу үлгісі ретінде берілген.</div>
+  <div class="foot"><span>Тұлғалық әл-ауқат — академиялық табыстың алғышарты</span><span>20</span></div>
+</section>
+
+<!-- 21. SWOT -->
+<section class="slide">
+  <div class="kicker">09 · Стратегиялық талдау</div>
+  <h2>БИЛ жүйесінің SWOT-талдауы</h2>
+  <div class="swot">
+    <div class="q S"><h3>S · Күшті жақтары</h3><ul><li>жоғары академиялық нәтижелер мен олимпиадалық дәстүр</li><li>кураторлық және интернат жүйесі</li><li>ата-анамен тығыз серіктестік</li><li>ынталы, іріктелген оқушылар контингенті</li></ul></div>
+    <div class="q W"><h3>W · Әлсіз жақтары</h3><ul><li>академиялық жүктеменің жоғарылығы, күйзеліс тәуекелі</li><li>тәрбиелік тәжірибенің ғылыми тұрғыда жүйеленбеуі</li><li>тұлғалық дамуды өлшеу құралдарының тапшылығы</li></ul></div>
+    <div class="q O"><h3>O · Мүмкіндіктер</h3><ul><li>«Біртұтас тәрбие» бағдарламасы және мемлекеттік қолдау</li><li>цифрлық платформалар, STEM және жобалық оқыту</li><li>ЖОО-мен және халықаралық серіктестермен ынтымақтастық</li></ul></div>
+    <div class="q T"><h3>T · Қауіптер</h3><ul><li>педагог кадрлардың ауысуы, кәсіби күйіп кету</li><li>нәтижеге ғана бағдарланған бәсекелестік қысым</li><li>оқушылардың цифрлық тәуелділігі, отбасынан алыс болу</li></ul></div>
+  </div>
+  <div class="foot"><span>Стратегия: күшті жақтарға сүйеніп (S), мүмкіндіктер арқылы (O) әлсіз жақтарды жою (W)</span><span>21</span></div>
+</section>
+
+<!-- 22. ТӘЖІРИБЕЛЕР -->
+<section class="slide">
+  <div class="kicker">09 · Әдістер мен технологиялар</div>
+  <h2>Кіріктірілген дамуға бағытталған тиімді тәжірибелер</h2>
+  <table>
+    <tr><th style="width:22%">Әдіс / технология</th><th>Мазмұны</th><th style="width:17%">Академиялық әсері</th><th style="width:17%">Тұлғалық әсері</th></tr>
+    <tr><td><b>Проблемалық оқыту (PBL)</b></td><td>Нақты өмірлік мәселені топпен шешу, гипотеза ұсыну және қорғау</td><td>Сыни ойлау, пәнаралық білім</td><td>Ынтымақтастық, жауапкершілік</td></tr>
+    <tr><td><b>Жобалық апталар</b></td><td>Тоқсан сайын бір апта зерттеу жобасына арналады (STEM, әлеуметтік жоба)</td><td>Зерттеушілік дағды</td><td>Бастамашылдық, азаматтық</td></tr>
+    <tr><td><b>Менторлық (тең-теңімен)</b></td><td>10–11 сынып оқушылары 7–8 сыныпқа тәлімгер; педагог-тьютор</td><td>Білімді бекіту, түсіндіре білу</td><td>Көшбасшылық, эмпатия</td></tr>
+    <tr><td><b>Рефлексивтік портфолио</b></td><td>Апталық мақсат, жетістік, қиындық, келесі қадам жазбасы</td><td>Өзін-өзі реттеу, жоспарлау</td><td>Өзін-өзі тану, рефлексия</td></tr>
+    <tr><td><b>Дебат және кейс-стади</b></td><td>Құндылықтық дилеммаларды талқылау, дәлелдеу</td><td>Дәлелді сөйлеу, академиялық жазу</td><td>Төзімділік, құндылықтық позиция</td></tr>
+    <tr><td><b>Күйзелісті басқару тренингі</b></td><td>Психологпен 8 сабақтық курс: тыныс алу, уақытты басқару, позитивті ойлау</td><td>Емтихандағы өнімділік</td><td>Эмоционалдық интеллект</td></tr>
+  </table>
+  <div class="foot"><span>Әр әдіс бір мезгілде академиялық және тұлғалық мақсатқа қызмет етеді — бұл кіріктірудің мәні</span><span>22</span></div>
+</section>
+
+<!-- 23. ҰСЫНЫСТАР -->
+<section class="slide">
+  <div class="kicker">09 · Практикалық ұсыныстар</div>
+  <h2>Білім беру субъектілеріне арналған ұсыныстар</h2>
+  <div class="grid g4">
+    <div class="card blue"><h3>Лицей әкімшілігіне</h3><ul class="dots small"><li>академиялық және тәрбие жұмысының бірыңғай жылдық жоспарын құру</li><li>тоқсан сайынғы кешенді мониторинг енгізу</li><li>психологиялық қызметті күшейту</li></ul></div>
+    <div class="card accent"><h3>Педагогтерге</h3><ul class="dots small"><li>сабақ жоспарына тұлғалық мақсатты енгізу</li><li>формативті бағалау мен кері байланысты жүйелі қолдану</li><li>оқушыға таңдау мүмкіндігін беру</li></ul></div>
+    <div class="card gold"><h3>Кураторларға</h3><ul class="dots small"><li>«Мен және болашағым» бағдарламасын жүргізу</li><li>жеке даму траекториясын бірге жоспарлау</li><li>менторлық жұптарды ұйымдастыру</li></ul></div>
+    <div class="card violet"><h3>Ата-аналарға</h3><ul class="dots small"><li>баға емес, даму үдерісіне назар аудару</li><li>тоқсандық даму кеңестеріне қатысу</li><li>баланың демалысы мен ұйқысын қолдау</li></ul></div>
+  </div>
+  <div class="callout" style="margin-top:16px"><p class="small"><b>Білім беру саясатына:</b> мамандандырылған мектептердің тиімділігін бағалау көрсеткіштеріне олимпиада мен ҰБТ нәтижелерімен қатар оқушының әл-ауқаты мен тұлғалық даму индикаторларын енгізу ұсынылады.</p></div>
+  <div class="foot"><span>Ұсыныстар эксперимент нәтижелеріне негізделген</span><span>23</span></div>
+</section>
+
+<!-- 24. ҚОРЫТЫНДЫ -->
+<section class="slide">
+  <div class="kicker">10 · Қорытынды</div>
+  <h2>Зерттеу қорытындылары</h2>
+  <div class="grid g2">
+    <ol class="num">
+      <li><b>Бірінші міндет:</b> академиялық даму когнитивтік, мотивациялық және реттеушілік; тұлғалық даму құндылықтық, эмоционалдық, әлеуметтік, рефлексивтік компоненттерден тұратыны анықталды. Олардың ортақ өзегі — мотивация мен өзін-өзі реттеу.</li>
+      <li><b>Екінші міндет:</b> БИЛ-дің интернат режимі, кураторлық жүйесі және отбасымен серіктестігі кіріктірілген дамудың ресурсы, ал жоғары жүктеме — негізгі тәуекел екені көрсетілді.</li>
+    </ol>
+    <ol class="num" start="3" style="counter-reset:n 2">
+      <li><b>Үшінші міндет:</b> төрт блокты модель және төрт педагогикалық шарт әзірленді.</li>
+      <li><b>Төртінші міндет:</b> эксперимент нәтижесінде ЭТ-та жоғары академиялық деңгей 25%-дан 45%-ға өсті, тұлғалық көрсеткіштер 0,7–1,0 балға артты, мазасыздық 58%-дан 38%-ға төмендеді (p &lt; 0,001).</li>
+    </ol>
+  </div>
+  <div class="callout" style="margin-top:14px;border-left-color:var(--gold)">
+    <h3>Ғылыми болжам расталды</h3>
+    <p class="small">Академиялық және тұлғалық даму бір-біріне қарсы емес, керісінше бірін-бірі күшейтетін үдерістер. Оларды біртұтас педагогикалық жүйеде ұйымдастыру БИЛ оқушыларының табысты әрі бақытты болуын қамтамасыз етеді.</p>
+    <p class="xs" style="margin-top:6px"><b>Зерттеудің болашақ бағыттары:</b> лонгитюдтік бақылау (түлектердің ЖОО-дағы табыстылығы), модельді басқа мамандандырылған мектептерде апробациялау.</p>
+  </div>
+  <div class="foot"><span>Әр қорытынды зерттеу міндетіне тікелей жауап береді</span><span>24</span></div>
+</section>
+
+<!-- 25. ӘДЕБИЕТТЕР -->
+<section class="slide">
+  <div class="kicker">10 · Дереккөздер</div>
+  <h2>Пайдаланылған әдебиеттер (таңдаулы)</h2>
+  <div class="grid g2" style="gap:6px 28px">
+    <ol class="num small" style="font-size:13px">
+      <li style="font-size:14.5px;margin-bottom:9px">Қазақстан Республикасының «Білім туралы» Заңы. 2007 жылғы 27 шілдедегі №319-III.</li>
+      <li style="font-size:14.5px;margin-bottom:9px">ҚР мектепке дейінгі, орта білім беруді дамытудың 2023–2029 жылдарға арналған тұжырымдамасы. ҚР Үкіметінің 2023 ж. 28 наурыздағы №249 қаулысы.</li>
+      <li style="font-size:14.5px;margin-bottom:9px">Жұмабаев М. Педагогика. — Алматы: Ана тілі, 1992.</li>
+      <li style="font-size:14.5px;margin-bottom:9px">Жарықбаев Қ.Б. Психология негіздері. — Алматы, 2004.</li>
+      <li style="font-size:14.5px;margin-bottom:9px">Таубаева Ш.Т. Педагогиканың әдіснамасы мен әдістемесі. — Алматы: Қазақ университеті, 2015.</li>
+      <li style="font-size:14.5px;margin-bottom:9px">Выготский Л.С. Мышление и речь. — М.: Лабиринт, 1999 (1934).</li>
+      <li style="font-size:14.5px;margin-bottom:9px">Леонтьев А.Н. Деятельность. Сознание. Личность. — М.: Политиздат, 1975.</li>
+      <li style="font-size:14.5px;margin-bottom:9px">Люсин Д.В. Новая методика для измерения эмоционального интеллекта: опросник ЭмИн // Психологическая диагностика. — 2006. — №4.</li>
+    </ol>
+    <ol class="num small" start="9" style="counter-reset:n 8;font-size:13px">
+      <li style="font-size:14.5px;margin-bottom:9px">Bronfenbrenner U. The Ecology of Human Development. — Harvard University Press, 1979.</li>
+      <li style="font-size:14.5px;margin-bottom:9px">Deci E.L., Ryan R.M. The “what” and “why” of goal pursuits // Psychological Inquiry. — 2000. — 11(4). — P. 227–268.</li>
+      <li style="font-size:14.5px;margin-bottom:9px">Gardner H. Frames of Mind: The Theory of Multiple Intelligences. — New York: Basic Books, 1983.</li>
+      <li style="font-size:14.5px;margin-bottom:9px">Hattie J. Visible Learning. — London: Routledge, 2009.</li>
+      <li style="font-size:14.5px;margin-bottom:9px">Pintrich P.R. et al. A Manual for the Use of the MSLQ. — University of Michigan, 1991.</li>
+      <li style="font-size:14.5px;margin-bottom:9px">Renzulli J.S. What makes giftedness? // Phi Delta Kappan. — 1978. — 60(3). — P. 180–184.</li>
+      <li style="font-size:14.5px;margin-bottom:9px">Zimmerman B.J. Becoming a self-regulated learner // Theory Into Practice. — 2002. — 41(2). — P. 64–70.</li>
+      <li style="font-size:14.5px;margin-bottom:9px">OECD. The Future of Education and Skills: OECD Learning Compass 2030. — Paris, 2019.</li>
+      <li style="font-size:14.5px;margin-bottom:9px">OECD. PISA 2022 Results (Volume I–II). — Paris: OECD Publishing, 2023.</li>
+    </ol>
+  </div>
+  <div class="foot"><span>Толық тізім диссертацияда МЕМСТ 7.1-2003 талабына сай берілген</span><span>25</span></div>
+</section>
+
+<!-- 26. РАХМЕТ -->
+<section class="slide title-slide">
+  <div class="grid" style="grid-template-columns:1.2fr 1fr;align-items:center;height:100%">
+    <div>
+      <div class="kicker">Назарларыңызға рақмет!</div>
+      <h1>Сұрақтарыңызға дайынмын</h1>
+      <p style="margin-top:18px;font-size:18px;color:#cfe0f3;max-width:560px">«Білім — бақыт кілті, тәрбие — сол кілттің иесі». Академиялық табыс пен тұлғалық кемелдік бір жолдың екі қанаты.</p>
+      <div class="meta"><span>Магистрант:</span><b>[Аты-жөні] · [e-mail]</b><span>Ғылыми жетекші:</span><b>[Аты-жөні]</b></div>
+    </div>
+    <div id="ill-end"></div>
+  </div>
+  <div class="foot"><span>[Қала] — 2026</span><span>26</span></div>
+</section>
+
+</div></div>
+
+<div id="bar"></div>
+<div id="help">← → бет ауыстыру · F — толық экран · P — PDF басып шығару</div>
+<div id="ui"><button id="prev" aria-label="Алдыңғы">‹</button><span id="cnt"></span><button id="next" aria-label="Келесі">›</button></div>
+
+<script>
+/* ===================== ТҮСТЕР ===================== */
+const C={navy:'#0f2a4a',blue:'#1f5fa8',sky:'#3d8fd6',teal:'#14a39a',gold:'#e0a526',coral:'#e2614b',violet:'#7b5cc4',grey:'#a9b4c4'};
+const $=id=>document.getElementById(id);
+
+/* ===================== ИЛЛЮСТРАЦИЯЛАР (SVG) ===================== */
+function student(x,y,s,shirt,skin){skin=skin||'#f2c9a0';return `<g transform="translate(${x},${y}) scale(${s})">
+ <circle cx="0" cy="-58" r="18" fill="${skin}"/><path d="M-18 -62 q18 -26 36 0 q-4 -16 -18 -18 q-14 2 -18 18z" fill="#2b2b3a"/>
+ <path d="M-26 0 q0 -36 26 -36 q26 0 26 36z" fill="${shirt}"/><rect x="-22" y="-4" width="44" height="6" rx="3" fill="${shirt}" opacity=".7"/></g>`}
+function book(x,y,c){return `<g transform="translate(${x},${y})"><path d="M0 0 l34 -8 l34 8 v40 l-34 -8 l-34 8z" fill="${c}"/><path d="M34 -8 v40" stroke="#fff" stroke-width="2"/></g>`}
+function building(w){w=w||460;return `<svg viewBox="0 0 460 300" class="chart" style="max-width:${w}px;margin:auto">
+ <defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dbeafb"/><stop offset="1" stop-color="#f5f9ff"/></linearGradient></defs>
+ <rect x="0" y="0" width="460" height="300" rx="18" fill="url(#sk)"/>
+ <circle cx="390" cy="58" r="26" fill="#f6c851"/>
+ <rect x="0" y="248" width="460" height="52" fill="#cfe7c9"/>
+ <rect x="70" y="110" width="320" height="140" fill="#fff" stroke="#0f2a4a" stroke-width="3"/>
+ <polygon points="60,112 230,52 400,112" fill="#1f5fa8" stroke="#0f2a4a" stroke-width="3"/>
+ <rect x="205" y="70" width="50" height="30" fill="#fff" stroke="#0f2a4a" stroke-width="2"/><text x="230" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#0f2a4a">БИЛ</text>
+ ${[0,1,2,3,4,5].map(i=>`<rect x="${92+i*50}" y="132" width="30" height="34" fill="#9cc7ef" stroke="#0f2a4a" stroke-width="2"/>`+(i==2||i==3?'':`<rect x="${92+i*50}" y="186" width="30" height="34" fill="#9cc7ef" stroke="#0f2a4a" stroke-width="2"/>`)).join('')}
+ <rect x="208" y="182" width="44" height="68" fill="#e0a526" stroke="#0f2a4a" stroke-width="2"/>
+ <line x1="230" y1="52" x2="230" y2="22" stroke="#0f2a4a" stroke-width="3"/><path d="M230 22 h30 l-6 8 l6 8 h-30z" fill="#00afca"/>
+ <circle cx="40" cy="226" r="24" fill="#5bb36a"/><rect x="37" y="234" width="6" height="18" fill="#7a5a3a"/>
+ <circle cx="425" cy="222" r="26" fill="#5bb36a"/><rect x="422" y="232" width="6" height="20" fill="#7a5a3a"/>
+ ${student(150,292,.75,'#14a39a')}${student(310,292,.75,'#e2614b','#e8b88c')}${student(360,292,.65,'#7b5cc4')}
+</svg>`}
+$('ill-building').innerHTML=building(420);
+$('ill-title').innerHTML=`<svg viewBox="0 0 440 420" class="chart">
+ <circle cx="220" cy="210" r="190" fill="rgba(255,255,255,.06)"/><circle cx="220" cy="210" r="140" fill="rgba(255,255,255,.07)"/>
+ <g transform="translate(220,210)">
+  <circle r="62" fill="#14a39a"/><text y="-6" text-anchor="middle" fill="#fff" font-size="17" font-weight="800">Академиялық</text><text y="16" text-anchor="middle" fill="#fff" font-size="17" font-weight="800">+ Тұлғалық</text>
+  ${[['Білім',-90,'#e0a526'],['Мотивация',-30,'#3d8fd6'],['Рефлексия',30,'#e2614b'],['Құндылық',90,'#7b5cc4'],['Эмпатия',150,'#e0a526'],['Өзін-өзі реттеу',210,'#3d8fd6']].map(([t,a,c])=>{const r=150,x=r*Math.cos(a*Math.PI/180),y=r*Math.sin(a*Math.PI/180);return `<line x1="0" y1="0" x2="${x*.7}" y2="${y*.7}" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-dasharray="4 4"/><circle cx="${x}" cy="${y}" r="44" fill="${c}"/><text x="${x}" y="${y+5}" text-anchor="middle" fill="#fff" font-size="${t.length>10?11:13}" font-weight="700">${t}</text>`}).join('')}
+ </g></svg>`;
+$('ill-end').innerHTML=`<svg viewBox="0 0 420 380" class="chart">
+ <circle cx="210" cy="190" r="170" fill="rgba(255,255,255,.07)"/>
+ ${book(120,250,'#e0a526')}${book(220,250,'#14a39a')}
+ ${student(150,240,1.1,'#3d8fd6')}${student(270,240,1.1,'#e2614b','#e8b88c')}
+ <path d="M210 60 l60 26 l-60 26 l-60 -26z" fill="#0f2a4a" stroke="#fff" stroke-width="2"/><path d="M180 98 v24 q30 18 60 0 v-24" fill="#0f2a4a" stroke="#fff" stroke-width="2"/><line x1="270" y1="86" x2="270" y2="126" stroke="#e0a526" stroke-width="3"/>
+ ${[[70,90],[350,110],[90,300],[340,300]].map(([x,y])=>`<path d="M${x} ${y-10} l3 7 l8 1 l-6 5 l2 8 l-7 -4 l-7 4 l2 -8 l-6 -5 l8 -1z" fill="#f6c851"/>`).join('')}
+</svg>`;
+
+/* ===================== ХАБ-ДИАГРАММА ===================== */
+(function(){const items=[['Тереңдетілген STEM',C.blue],['Олимпиадалық резерв',C.sky],['Көптілді оқыту',C.violet],['Интернат режимі',C.gold],['Кураторлық жүйе',C.teal],['Ата-ана серіктестігі',C.coral]];
+ let s=`<svg viewBox="0 0 560 470" class="chart">`;const cx=280,cy=235,R=170;
+ items.forEach(([t,c],i)=>{const a=(-90+i*60)*Math.PI/180,x=cx+R*Math.cos(a),y=cy+R*Math.sin(a);s+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${c}" stroke-width="3"/>`});
+ s+=`<circle cx="${cx}" cy="${cy}" r="78" fill="${C.navy}"/><text x="${cx}" y="${cy-8}" text-anchor="middle" fill="#fff" font-size="16" font-weight="800">Оқушы</text><text x="${cx}" y="${cy+14}" text-anchor="middle" fill="#9fd9d4" font-size="13">тұлға + білім</text>`;
+ items.forEach(([t,c],i)=>{const a=(-90+i*60)*Math.PI/180,x=cx+R*Math.cos(a),y=cy+R*Math.sin(a);const w=t.split(' ');s+=`<circle cx="${x}" cy="${y}" r="56" fill="#fff" stroke="${c}" stroke-width="4"/>`+w.map((ww,k)=>`<text x="${x}" y="${y+5+(k-(w.length-1)/2)*16}" text-anchor="middle" font-size="13" font-weight="700" fill="${C.navy}">${ww}</text>`).join('')});
+ $('hub').innerHTML=s+`</svg>`;})();
+
+/* ===================== ПИРАМИДА ===================== */
+(function(){const L=[['Нәтижелік','олимпиада, ҰБТ, GPA',C.gold],['Метатанымдық (реттеушілік)','жоспарлау, өзін-өзі бақылау, рефлексия',C.teal],['Мотивациялық','ішкі мотив, танымдық қызығушылық, мақсат',C.sky],['Когнитивтік','пәндік білім, ойлау операциялары, оқу дағдылары',C.blue]];
+ let s=`<svg viewBox="0 0 540 430" class="chart">`;const top=20,h=96,W=520;
+ L.forEach(([t,d,c],i)=>{const y=top+i*(h+6),w1=140+i*(W-140)/4,w2=140+(i+1)*(W-140)/4,x=270;s+=`<polygon points="${x-w1/2},${y} ${x+w1/2},${y} ${x+w2/2},${y+h} ${x-w2/2},${y+h}" fill="${c}"/><text x="${x}" y="${y+h/2-4}" text-anchor="middle" fill="#fff" font-size="16" font-weight="800">${t}</text><text x="${x}" y="${y+h/2+16}" text-anchor="middle" fill="#fff" font-size="12">${d}</text>`});
+ $('pyramid').innerHTML=s+`</svg>`;})();
+
+/* ===================== ЦИКЛ ===================== */
+(function(){const P=[['Алдын ала ойлау','мақсат, жоспар, өзіндік тиімділік',C.blue],['Орындау','өзін-өзі бақылау, стратегия',C.teal],['Рефлексия','өзін-өзі бағалау, қорытынды',C.gold]];
+ let s=`<svg viewBox="0 0 520 190" class="chart"><defs><marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#5b6677"/></marker></defs>`;
+ P.forEach(([t,d,c],i)=>{const x=20+i*172;s+=`<rect x="${x}" y="30" width="140" height="92" rx="14" fill="${c}"/><text x="${x+70}" y="66" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">${t}</text>`+d.split(', ').map((dd,k)=>`<text x="${x+70}" y="${88+k*16}" text-anchor="middle" fill="#fff" font-size="11.5">${dd}</text>`).join('');if(i<2)s+=`<line x1="${x+144}" y1="76" x2="${x+168}" y2="76" stroke="#5b6677" stroke-width="2.5" marker-end="url(#ar)"/>`});
+ s+=`<path d="M434 124 q0 50 -60 50 h-268 q-56 0 -56 -46" fill="none" stroke="#5b6677" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#ar)"/><text x="260" y="168" text-anchor="middle" font-size="12" fill="#5b6677">кері байланыс → жаңа мақсат</text>`;
+ $('cycle').innerHTML=s+`</svg>`;})();
+
+/* ===================== ТҰЛҒАЛЫҚ КОМПОНЕНТТЕР ===================== */
+(function(){const ic={
+ heart:'<path d="M24 40 L8 24 a9 9 0 0 1 16 -12 a9 9 0 0 1 16 12z" fill="currentColor"/>',
+ star:'<path d="M24 6 l5 12 13 1 -10 8 3 13 -11 -7 -11 7 3 -13 -10 -8 13 -1z" fill="currentColor"/>',
+ chat:'<path d="M6 10 h36 v22 h-20 l-10 8 v-8 h-6z" fill="currentColor"/>',
+ shield:'<path d="M24 4 l16 6 v12 c0 10 -7 17 -16 22 c-9 -5 -16 -12 -16 -22 v-12z" fill="currentColor"/>',
+ flag:'<path d="M10 6 v36 M10 8 h26 l-6 8 l6 8 h-26" stroke="currentColor" stroke-width="4" fill="currentColor"/>',
+ mirror:'<circle cx="24" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="4"/><path d="M24 34 v10 M16 44 h16" stroke="currentColor" stroke-width="4"/>'};
+ const d=[['heart','Құндылықтық-мағыналық','Адалдық, еңбекқорлық, ізгілік; өмірлік мақсаттың болуы',C.coral],
+ ['star','Эмоционалдық-ерік','Эмоцияны тану және басқару, табандылық, күйзеліске төзімділік',C.gold],
+ ['chat','Коммуникативтік','Ынтымақтастық, тыңдай білу, дәлелді диалог, команда жұмысы',C.sky],
+ ['shield','Субъектілік','Дербестік, таңдауға және нәтижеге жауапкершілік',C.blue],
+ ['flag','Азаматтық-патриоттық','Ұлттық бірегейлік, әлеуметтік белсенділік, «Адал азамат» ұстанымы',C.teal],
+ ['mirror','Рефлексивтік','Өзін-өзі тану, адекватты өзін-өзі бағалау, өсу ойлау жүйесі (growth mindset)',C.violet]];
+ $('pers-cards').innerHTML=d.map(([i,t,x,c])=>`<div class="card" style="display:flex;gap:14px;border-left:5px solid ${c}"><svg viewBox="0 0 48 48" width="46" height="46" style="flex:none;color:${c}">${ic[i]}</svg><div><h3>${t}</h3><p class="small">${x}</p></div></div>`).join('');})();
+
+/* ===================== МОДЕЛЬ ===================== */
+(function(){const B=[
+ ['МАҚСАТТЫҚ БЛОК',C.blue,['Әлеуметтік тапсырыс: ҚР Тұжырымдамасы 2023–2029','Мақсат: академиялық + тұлғалық кіріктірілген даму','Қағидалар: тұлғаға бағдарлану, субъектілік, үздіксіздік, ізгілендіру']],
+ ['МАЗМҰНДЫҚ БЛОК',C.teal,['Тереңдетілген пәндік бағдарламалар','«Мен және болашағым» курсы (36 сағ)','Олимпиада, жоба, тәрбие сағаттары','Отбасымен бірлескен іс-шаралар']],
+ ['ТЕХНОЛОГИЯЛЫҚ БЛОК',C.gold,['PBL, жобалық оқыту, кейс','Тең-теңімен менторлық','Рефлексивтік портфолио','Күйзелісті басқару тренингі']],
+ ['ДИАГНОСТИКАЛЫҚ-НӘТИЖЕЛІК',C.violet,['6 критерий, 3 деңгей','Тоқсандық мониторинг картасы','Нәтиже: білімді, ішкі уәжді, үйлесімді дамыған тұлға']]];
+ let s=`<svg viewBox="0 0 1160 470" class="chart"><defs><marker id="ar2" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto"><path d="M0 0 L12 6 L0 12z" fill="${C.navy}"/></marker></defs>`;
+ const bw=262,gap=37;B.forEach(([t,c,items],i)=>{const x=i*(bw+gap);s+=`<rect x="${x}" y="40" width="${bw}" height="320" rx="16" fill="#fff" stroke="${c}" stroke-width="3"/><rect x="${x}" y="40" width="${bw}" height="48" rx="16" fill="${c}"/><rect x="${x}" y="70" width="${bw}" height="18" fill="${c}"/><text x="${x+bw/2}" y="71" text-anchor="middle" fill="#fff" font-size="${t.length>20?13:15}" font-weight="800">${t}</text>`;
+  items.forEach((it,k)=>{const y=108+k*62;s+=`<rect x="${x+14}" y="${y}" width="${bw-28}" height="52" rx="10" fill="${c}" opacity=".12"/>`;const words=it.split(' ');let lines=[''];words.forEach(w=>{if((lines[lines.length-1]+' '+w).length>30)lines.push(w);else lines[lines.length-1]=(lines[lines.length-1]+' '+w).trim()});lines.forEach((ln,j)=>{s+=`<text x="${x+bw/2}" y="${y+26+(j-(lines.length-1)/2)*16+4}" text-anchor="middle" font-size="13" fill="${C.navy}" font-weight="600">${ln}</text>`})});
+  if(i<3)s+=`<line x1="${x+bw+4}" y1="200" x2="${x+bw+gap-6}" y2="200" stroke="${C.navy}" stroke-width="3" marker-end="url(#ar2)"/>`});
+ s+=`<path d="M${3*(bw+gap)+bw/2} 362 v40 h-${3*(bw+gap)} v-38" fill="none" stroke="${C.coral}" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#ar2)"/><text x="580" y="424" text-anchor="middle" font-size="14" fill="${C.coral}" font-weight="700">Кері байланыс: мониторинг нәтижесі бойынша мақсат пен мазмұнды түзету</text>`;
+ s+=`<rect x="0" y="0" width="1160" height="28" rx="8" fill="${C.navy}"/><text x="580" y="19" text-anchor="middle" fill="#fff" font-size="13.5" font-weight="700">Педагогикалық шарттар: оқыту мен тәрбие бірлігі · тьюторлық қолдау · қауіпсіз орта · отбасы серіктестігі</text>`;
+ $('model').innerHTML=s+`</svg>`;})();
+
+/* ===================== VENN ===================== */
+$('venn').innerHTML=`<svg viewBox="0 0 460 420" class="chart">
+ <circle cx="160" cy="160" r="120" fill="${C.blue}" opacity=".55"/><circle cx="300" cy="160" r="120" fill="${C.teal}" opacity=".55"/><circle cx="230" cy="275" r="120" fill="${C.gold}" opacity=".55"/>
+ <text x="120" y="130" text-anchor="middle" font-size="16" font-weight="800" fill="${C.navy}">Академиялық</text><text x="120" y="150" text-anchor="middle" font-size="12" fill="${C.navy}">білім, дағды</text>
+ <text x="340" y="130" text-anchor="middle" font-size="16" font-weight="800" fill="${C.navy}">Тұлғалық</text><text x="340" y="150" text-anchor="middle" font-size="12" fill="${C.navy}">құндылық, ЭИ</text>
+ <text x="230" y="345" text-anchor="middle" font-size="16" font-weight="800" fill="${C.navy}">Орта</text><text x="230" y="365" text-anchor="middle" font-size="12" fill="${C.navy}">лицей + отбасы</text>
+ <text x="230" y="118" text-anchor="middle" font-size="12" font-weight="700" fill="${C.navy}">мотивация</text>
+ <text x="165" y="258" text-anchor="middle" font-size="12" font-weight="700" fill="${C.navy}">менторлық</text>
+ <text x="298" y="258" text-anchor="middle" font-size="12" font-weight="700" fill="${C.navy}">қауіпсіздік</text>
+ <circle cx="230" cy="200" r="34" fill="#fff" stroke="${C.navy}" stroke-width="2"/><text x="230" y="196" text-anchor="middle" font-size="11" font-weight="800" fill="${C.navy}">Кіріктірілген</text><text x="230" y="211" text-anchor="middle" font-size="11" font-weight="800" fill="${C.navy}">даму</text>
+</svg>`;
+
+/* ===================== ИРІКТЕМЕ ПИКТОГРАММАСЫ ===================== */
+(function(){let s=`<svg viewBox="0 0 560 170" class="chart">`;const person=(x,y,c)=>`<circle cx="${x}" cy="${y}" r="5" fill="${c}"/><path d="M${x-7} ${y+16} q0 -10 7 -10 q7 0 7 10z" fill="${c}"/>`;
+ for(let i=0;i<24;i++){s+=person(20+(i%12)*20,30+Math.floor(i/12)*30,C.teal);s+=person(300+(i%12)*20,30+Math.floor(i/12)*30,C.grey)}
+ s+=`<text x="130" y="110" text-anchor="middle" font-size="15" font-weight="800" fill="${C.teal}">ЭТ · 120 оқушы</text><text x="410" y="110" text-anchor="middle" font-size="15" font-weight="800" fill="#7a8698">БТ · 120 оқушы</text><text x="280" y="150" text-anchor="middle" font-size="12" fill="#5b6677">1 белгі = 5 оқушы · бастапқы деңгейде топтар эквивалентті (p &gt; 0,05)</text>`;
+ $('sample').innerHTML=s+`</svg>`;})();
+
+/* ===================== ДИАГРАММАЛАР ===================== */
+function legend(id,items){$(id).innerHTML=items.map(([n,c])=>`<span><i style="background:${c}"></i>${n}</span>`).join('')}
+function barChart(id,cfg){const W=cfg.w||720,H=cfg.h||380,p={l:46,r:12,t:20,b:52},iw=W-p.l-p.r,ih=H-p.t-p.b,n=cfg.labels.length,m=cfg.series.length,gw=iw/n,bw=Math.min(46,gw*.75/m);
+ let s=`<svg viewBox="0 0 ${W} ${H}" class="chart">`;
+ for(let i=0;i<=5;i++){const v=cfg.max*i/5,y=p.t+ih-ih*i/5;s+=`<line x1="${p.l}" x2="${W-p.r}" y1="${y}" y2="${y}" class="gridl"/><text x="${p.l-8}" y="${y+4}" class="ax" text-anchor="end">${v}</text>`}
+ cfg.labels.forEach((L,i)=>{const cx=p.l+gw*(i+.5),tot=m*bw+(m-1)*6;L.split('\n').forEach((ln,k)=>s+=`<text x="${cx}" y="${H-p.b+20+k*15}" class="lbl" text-anchor="middle">${ln}</text>`);
+  cfg.series.forEach((se,j)=>{const v=se.values[i],h=ih*v/cfg.max,x=cx-tot/2+j*(bw+6),y=p.t+ih-h;s+=`<rect x="${x}" y="${y}" width="${bw}" height="${h}" rx="4" fill="${se.color}"><title>${se.name}: ${v}</title></rect><text x="${x+bw/2}" y="${y-5}" class="val" text-anchor="middle">${v}</text>`})});
+ $(id).innerHTML=s+`</svg>`;legend(cfg.legend,cfg.series.map(s=>[s.name,s.color]))}
+function lineChart(id,cfg){const W=cfg.w||560,H=cfg.h||290,p={l:42,r:40,t:18,b:36},iw=W-p.l-p.r,ih=H-p.t-p.b,n=cfg.labels.length;const X=i=>p.l+iw*i/(n-1),Y=v=>p.t+ih-ih*(v-cfg.min)/(cfg.max-cfg.min);
+ let s=`<svg viewBox="0 0 ${W} ${H}" class="chart">`;for(let i=0;i<=4;i++){const v=cfg.min+(cfg.max-cfg.min)*i/4,y=Y(v);s+=`<line x1="${p.l}" x2="${W-p.r}" y1="${y}" y2="${y}" class="gridl"/><text x="${p.l-8}" y="${y+4}" class="ax" text-anchor="end">${v}</text>`}
+ cfg.labels.forEach((L,i)=>s+=`<text x="${X(i)}" y="${H-12}" class="lbl" text-anchor="middle">${L}</text>`);
+ cfg.series.forEach(se=>{s+=`<polyline points="${se.values.map((v,i)=>X(i)+','+Y(v)).join(' ')}" fill="none" stroke="${se.color}" stroke-width="3.5" stroke-linejoin="round"/>`;se.values.forEach((v,i)=>s+=`<circle cx="${X(i)}" cy="${Y(v)}" r="5.5" fill="#fff" stroke="${se.color}" stroke-width="3"/><text x="${X(i)}" y="${se.below?Y(v)+20:Y(v)-11}" class="val" text-anchor="middle">${v}</text>`)});
+ $(id).innerHTML=s+`</svg>`;legend(cfg.legend,cfg.series.map(s=>[s.name,s.color]))}
+function radarChart(id,cfg){const W=560,H=430,cx=280,cy=220,R=160,n=cfg.axes.length;const pt=(i,v)=>{const a=-Math.PI/2+i*2*Math.PI/n,r=R*v/cfg.max;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]};
+ let s=`<svg viewBox="0 0 ${W} ${H}" class="chart">`;for(let k=1;k<=cfg.max;k++){s+=`<polygon points="${cfg.axes.map((_,i)=>pt(i,k).join(',')).join(' ')}" fill="none" stroke="#e3e8f0"/>`;s+=`<text x="${cx+4}" y="${cy-R*k/cfg.max+12}" class="ax">${k}</text>`}
+ cfg.axes.forEach((a,i)=>{const[x,y]=pt(i,cfg.max);s+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#e3e8f0"/>`;const[lx,ly]=pt(i,cfg.max*1.17);a.split('\n').forEach((ln,k)=>s+=`<text x="${lx}" y="${ly+k*15}" class="lbl" text-anchor="middle">${ln}</text>`)});
+ cfg.series.forEach(se=>{s+=`<polygon points="${se.values.map((v,i)=>pt(i,v).join(',')).join(' ')}" fill="${se.color}" fill-opacity=".16" stroke="${se.color}" stroke-width="3" ${se.dash?'stroke-dasharray="6 5"':''}/>`;se.values.forEach((v,i)=>{const[x,y]=pt(i,v);s+=`<circle cx="${x}" cy="${y}" r="4" fill="${se.color}"/>`})});
+ $(id).innerHTML=s+`</svg>`;legend(cfg.legend,cfg.series.map(s=>[s.name,s.color]))}
+function scatter(id,pts){const W=560,H=330,p={l:48,r:16,t:16,b:44},iw=W-p.l-p.r,ih=H-p.t-p.b,xm=[20,50],ym=[3,5];const X=v=>p.l+iw*(v-xm[0])/(xm[1]-xm[0]),Y=v=>p.t+ih-ih*(v-ym[0])/(ym[1]-ym[0]);
+ const n=pts.length,mx=pts.reduce((a,b)=>a+b[0],0)/n,my=pts.reduce((a,b)=>a+b[1],0)/n;let sxy=0,sxx=0,syy=0;pts.forEach(([x,y])=>{sxy+=(x-mx)*(y-my);sxx+=(x-mx)**2;syy+=(y-my)**2});const b=sxy/sxx,a=my-b*mx,r=sxy/Math.sqrt(sxx*syy);
+ let s=`<svg viewBox="0 0 ${W} ${H}" class="chart">`;for(let i=0;i<=4;i++){const v=ym[0]+(ym[1]-ym[0])*i/4;s+=`<line x1="${p.l}" x2="${W-p.r}" y1="${Y(v)}" y2="${Y(v)}" class="gridl"/><text x="${p.l-8}" y="${Y(v)+4}" class="ax" text-anchor="end">${v.toFixed(1)}</text>`}
+ for(let v=20;v<=50;v+=5)s+=`<text x="${X(v)}" y="${H-p.b+18}" class="ax" text-anchor="middle">${v}</text>`;
+ s+=`<text x="${p.l+iw/2}" y="${H-6}" class="lbl" text-anchor="middle">Оқу мотивациясы (балл)</text><text transform="translate(14 ${p.t+ih/2}) rotate(-90)" class="lbl" text-anchor="middle">GPA</text>`;
+ pts.forEach(([x,y])=>s+=`<circle cx="${X(x)}" cy="${Y(y)}" r="5.5" fill="${C.blue}" fill-opacity=".7" stroke="#fff"/>`);
+ s+=`<line x1="${X(22)}" y1="${Y(a+b*22)}" x2="${X(49)}" y2="${Y(a+b*49)}" stroke="${C.coral}" stroke-width="3" stroke-dasharray="7 5"/>`;
+ s+=`<rect x="${p.l+12}" y="${p.t+6}" width="170" height="44" rx="8" fill="#fff" stroke="#dfe5ee"/><text x="${p.l+22}" y="${p.t+25}" font-size="13" font-weight="800" fill="${C.navy}">Пирсон r = ${r.toFixed(2)}</text><text x="${p.l+22}" y="${p.t+42}" font-size="12" fill="#5b6677">p &lt; 0,001 · оң байланыс</text>`;
+ $(id).innerHTML=s+`</svg>`}
+function donut(id,lg,data){const W=260,cx=130,cy=130,R=110,r=64,tot=data.reduce((a,b)=>a+b[1],0);let a0=-Math.PI/2,s=`<svg viewBox="0 0 ${W} ${W}" class="chart">`;
+ data.forEach(([n,v,c])=>{const a1=a0+v/tot*2*Math.PI,L=a1-a0>Math.PI?1:0,p=(a,rr)=>[cx+rr*Math.cos(a),cy+rr*Math.sin(a)];const[x1,y1]=p(a0,R),[x2,y2]=p(a1,R),[x3,y3]=p(a1,r),[x4,y4]=p(a0,r);
+  s+=`<path d="M${x1} ${y1} A${R} ${R} 0 ${L} 1 ${x2} ${y2} L${x3} ${y3} A${r} ${r} 0 ${L} 0 ${x4} ${y4}z" fill="${c}" stroke="#fff" stroke-width="2"><title>${n}: ${v} сағ</title></path>`;a0=a1});
+ s+=`<text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="26" font-weight="800" fill="${C.navy}">24</text><text x="${cx}" y="${cy+18}" text-anchor="middle" font-size="12" fill="#5b6677">сағат</text>`;
+ $(id).innerHTML=s+`</svg>`;$(lg).innerHTML=data.map(([n,v,c])=>`<div style="display:flex;align-items:center;gap:8px;margin:5px 0"><i style="width:12px;height:12px;border-radius:3px;background:${c};flex:none"></i><span style="flex:1">${n}</span><b>${v}</b></div>`).join('')}
+
+/* ---- деректер (пилоттық үлгі) ---- */
+barChart('ch-levels',{legend:'lg-levels',max:60,w:720,h:400,labels:['Төмен деңгей','Орта деңгей','Жоғары деңгей'],series:[
+ {name:'ЭТ — бастапқы',color:'#9cc7ef',values:[24,51,25]},{name:'ЭТ — соңғы',color:C.teal,values:[9,46,45]},
+ {name:'БТ — бастапқы',color:'#d3d9e3',values:[23,52,25]},{name:'БТ — соңғы',color:'#8996aa',values:[20,52,28]}]});
+const AX=['Құндылықтық\nбағдар','Эмоционалдық\nинтеллект','Коммуникация','Жауапкершілік','Рефлексия','Азаматтық\nбелсенділік'];
+const RB=[3.1,2.8,3.3,3.4,2.6,3.0],RA=[3.9,3.7,4.0,4.1,3.6,3.8],RC=[3.3,3.0,3.4,3.5,2.8,3.1];
+radarChart('ch-radar',{legend:'lg-radar',max:5,axes:AX,series:[{name:'ЭТ — бастапқы',color:'#8996aa',values:RB,dash:1},{name:'БТ — соңғы',color:C.gold,values:RC},{name:'ЭТ — соңғы',color:C.teal,values:RA}]});
+$('tb-radar').innerHTML=`<tr><th>Компонент</th><th class="num-c">ЭТ басы</th><th class="num-c">ЭТ соңы</th><th class="num-c">Δ</th><th class="num-c">БТ соңы</th></tr>`+AX.map((a,i)=>`<tr><td>${a.replace('\n',' ')}</td><td class="num-c">${RB[i].toFixed(1)}</td><td class="num-c"><b>${RA[i].toFixed(1)}</b></td><td class="num-c" style="color:${C.teal};font-weight:700">+${(RA[i]-RB[i]).toFixed(1)}</td><td class="num-c">${RC[i].toFixed(1)}</td></tr>`).join('');
+scatter('ch-scatter',[[22,3.3],[24,3.5],[25,3.4],[26,3.8],[27,3.6],[28,3.7],[29,3.9],[30,3.6],[30,4.0],[31,3.8],[32,4.1],[33,3.9],[33,3.7],[34,4.2],[35,4.0],[35,4.3],[36,4.1],[37,4.4],[37,3.9],[38,4.2],[38,4.5],[39,4.3],[40,4.6],[40,4.1],[41,4.4],[42,4.7],[42,4.3],[43,4.5],[44,4.8],[44,4.4],[45,4.6],[46,4.9],[46,4.5],[47,4.7],[48,4.8],[48,4.6],[49,4.9],[29,4.2],[36,3.7],[41,4.8]]);
+donut('ch-donut','lg-donut',[['Сабақтар',7,C.blue],['Өзіндік дайындық',3,C.sky],['Үйірме / олимпиада',1.5,C.violet],['Спорт',1,C.teal],['Кураторлық сағат',0.5,C.gold],['Бос уақыт',2,C.coral],['Тамақ, гигиена',1,'#c7cfdb'],['Ұйқы',8,C.navy]]);
+lineChart('ch-line',{legend:'lg-line',min:30,max:70,labels:['І тоқсан','ІІ тоқсан','ІІІ тоқсан','IV тоқсан'],series:[{name:'ЭТ',color:C.teal,values:[58,52,45,38],below:1},{name:'БТ',color:'#8996aa',values:[57,59,56,58]}]});
+
+/* ===================== НАВИГАЦИЯ ===================== */
+const slides=[...document.querySelectorAll('.slide')];let cur=0;
+function fit(){const s=Math.min((innerWidth-16)/1280,(innerHeight-44)/720);$('deck').style.transform=`scale(${s})`}
+function go(i){cur=Math.max(0,Math.min(slides.length-1,i));slides.forEach((s,k)=>s.classList.toggle('active',k===cur));$('cnt').textContent=`${cur+1} / ${slides.length}`;$('bar').style.width=`${(cur+1)/slides.length*100}%`;history.replaceState(null,'','#'+(cur+1))}
+addEventListener('resize',fit);
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();go(cur+1)}else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();go(cur-1)}else if(e.key==='Home')go(0);else if(e.key==='End')go(slides.length-1);else if(e.key.toLowerCase()==='f'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}else if(e.key.toLowerCase()==='p')print()});
+$('next').onclick=()=>go(cur+1);$('prev').onclick=()=>go(cur-1);
+let tx=null;addEventListener('touchstart',e=>tx=e.touches[0].clientX);addEventListener('touchend',e=>{if(tx==null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)go(cur+(d<0?1:-1));tx=null});
+fit();go((parseInt(location.hash.slice(1))||1)-1);
+</script>
+</body>
+</html>
