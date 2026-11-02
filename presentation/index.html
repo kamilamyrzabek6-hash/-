@@ -172,6 +172,7 @@ td b{color:var(--navy)}
   <div class="card" style="margin-top:16px;border-left:5px solid var(--coral)">
     <p class="small">⚑ <b>Проблемалық сұрақ:</b> <i>Жоғары академиялық нәтижеге ұмтылатын лицейде оқушының тұлғалық дамуы мен психологиялық әл-ауқатын қалай сақтауға болады? Олар бір-біріне кедергі ме, әлде бірін-бірі толықтыра ма?</i></p>
   </div>
+  <div id="bn-stairs" style="margin-top:14px"></div>
   <div class="foot"><span>Семинар соңында осы сұраққа бірге жауап береміз</span><span>3</span></div>
 </section>
 
@@ -319,6 +320,7 @@ td b{color:var(--navy)}
   <h2>Тұлғалық дамудың компоненттері</h2>
   <div class="grid g3" id="pers-cards"></div>
   <div class="callout" style="margin-top:16px"><p class="small"><b>Неге дәл осы алты компонент?</b> Олар «Біртұтас тәрбие» бағдарламасының құндылықтарымен, OECD әлеуметтік-эмоционалдық дағдылар жіктемесімен және жасөспірім кезеңінің негізгі даму міндеттерімен (бірегейлік, дербестік, өзін-өзі анықтау) сәйкес келеді.</p></div>
+  <div id="bn-grow" style="margin-top:14px"></div>
   <div class="foot"><span>Тұлғалық даму — құндылықтардан мінез-құлыққа дейінгі тұтас жүйе</span><span>12</span></div>
 </section>
 
@@ -423,6 +425,7 @@ td b{color:var(--navy)}
     <div class="card violet"><p class="bigq">4. БИЛ тәжірибесінің қандай элементтерін жалпы білім беретін мектепке көшіруге болады?</p></div>
   </div>
   <div class="callout" style="margin-top:16px"><p class="small"><b>Талқылау ережесі:</b> әр пікір дәлелмен (теория, дерек немесе тәжірибе) негізделеді · бір-бірін тыңдаймыз · сынаймыз пікірді, адамды емес.</p></div>
+  <div id="bn-discuss" style="margin-top:14px"></div>
   <div class="foot"><span>Әдіс: «Ойлан – жұптас – бөліс» (Think–Pair–Share)</span><span>19</span></div>
 </section>
 
@@ -453,6 +456,7 @@ td b{color:var(--navy)}
   <h2>Өзін-өзі тексеру сұрақтары</h2>
   <div class="grid g3" id="quiz"></div>
   <div class="callout" style="margin-top:16px"><p class="small"><b>«3–2–1» рефлексиясы:</b> бүгін білген <b>3</b> жаңа ұғым · мені ойландырған <b>2</b> идея · әлі де түсінгім келетін <b>1</b> сұрақ.</p></div>
+  <div id="bn-reflect" style="margin-top:14px"></div>
   <div class="foot"><span>Жауапты көру үшін карточканы басыңыз</span><span>21</span></div>
 </section>
 
@@ -476,6 +480,7 @@ td b{color:var(--navy)}
     <p class="small">Академиялық және тұлғалық даму бір-біріне кедергі емес, керісінше бірін-бірі күшейтеді — егер оқу мен демалыстың, сыртқы талап пен ішкі мотивацияның теңгерімі сақталса.</p>
   </div>
   <div class="card" style="margin-top:12px"><p class="small"><b>Үй тапсырмасы:</b> БИЛ немесе өзіңіз оқыған мектептің тәжірибесі негізінде «Оқушының академиялық және тұлғалық дамуын үйлестірудің 5 жолы» тақырыбында 1–2 беттік эссе жазыңыз (кемінде 3 дереккөзге сілтеме).</p></div>
+  <div id="bn-grad" style="margin-top:14px"></div>
   <div class="foot"><span>Әр тұжырым семинар мақсаттарына жауап береді</span><span>22</span></div>
 </section>
 
@@ -568,6 +573,97 @@ $('ill-end').innerHTML=`<svg viewBox="0 0 420 380" class="chart">
 </svg>`;
 
 $('ill-plan').innerHTML=`<svg viewBox="0 0 360 380" class="chart">${[['Кіріспе',5,C.blue],['Теория',15,C.teal],['Талқылау',10,C.gold],['Топтық жұмыс',15,C.coral],['Рефлексия',5,C.violet]].map(([t,m,c],i)=>`<g transform="translate(20,${18+i*70})"><rect width="${60+m*14}" height="50" rx="12" fill="${c}"/><text x="14" y="31" fill="#fff" font-size="15" font-weight="800">${t}</text><text x="${74+m*14}" y="31" font-size="14" font-weight="700" fill="${C.navy}">${m}′</text></g>`).join('')}</svg>`;
+/* ===================== БАННЕР-ИЛЛЮСТРАЦИЯЛАР ===================== */
+function P(x,y,s,o){o=Object.assign({shirt:C.teal,skin:'#f2c9a0',hair:'#2b2233',pants:'#34405a',style:'short',raise:0,flip:1},o);
+ const armR=o.raise?`<path d="M13 42 Q24 26 22 6" stroke="${o.shirt}" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="22" cy="5" r="4" fill="${o.skin}"/>`:`<path d="M13 42 Q19 54 18 66" stroke="${o.shirt}" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="18" cy="67" r="3.6" fill="${o.skin}"/>`;
+ const hair=o.style==='long'?`<path d="M-14 22 Q-15 4 0 4 Q15 4 14 22 L15 40 Q10 42 9 34 L9 16 Q0 12 -9 16 L-9 34 Q-10 42 -15 40Z" fill="${o.hair}"/>`
+  :o.style==='bun'?`<circle cx="0" cy="3" r="7" fill="${o.hair}"/><path d="M-13.5 19 Q-13 5 0 5 Q13 5 13.5 19 Q8 11 0 12 Q-8 11 -13.5 19Z" fill="${o.hair}"/>`
+  :`<path d="M-13.5 19 Q-14 4 0 4 Q14 4 13.5 19 Q9 9 0 10 Q-9 9 -13.5 19Z" fill="${o.hair}"/>`;
+ return `<g transform="translate(${x},${y}) scale(${s*o.flip},${s}) translate(0,-100)">
+  <rect x="-9" y="70" width="7" height="30" rx="3" fill="${o.pants}"/><rect x="2" y="70" width="7" height="30" rx="3" fill="${o.pants}"/>
+  <ellipse cx="-5.5" cy="100" rx="6" ry="2.6" fill="#222"/><ellipse cx="5.5" cy="100" rx="6" ry="2.6" fill="#222"/>
+  <path d="M-13 42 Q-19 54 -18 66" stroke="${o.shirt}" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="-18" cy="67" r="3.6" fill="${o.skin}"/>
+  ${armR}
+  <path d="M-15 74 L-15 48 Q-15 35 0 35 Q15 35 15 48 L15 74Z" fill="${o.shirt}"/>
+  <path d="M-5 35 L0 42 L5 35" fill="#fff" opacity=".85"/>
+  <rect x="-3.5" y="29" width="7" height="8" fill="${o.skin}"/>
+  <circle cx="0" cy="19" r="13" fill="${o.skin}"/>${hair}
+  <circle cx="-4.5" cy="20" r="1.5" fill="#2b2233"/><circle cx="4.5" cy="20" r="1.5" fill="#2b2233"/>
+  <path d="M-4 25 Q0 28.5 4 25" stroke="#8a4b3a" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <circle cx="-8" cy="24" r="2.2" fill="#f19c8b" opacity=".45"/><circle cx="8" cy="24" r="2.2" fill="#f19c8b" opacity=".45"/>
+ </g>`}
+const spark=(x,y,r,c)=>`<path d="M${x} ${y-r} Q${x} ${y} ${x+r} ${y} Q${x} ${y} ${x} ${y+r} Q${x} ${y} ${x-r} ${y} Q${x} ${y} ${x} ${y-r}Z" fill="${c||'#f6c851'}"/>`;
+const cloud=(x,y,s)=>`<g transform="translate(${x},${y}) scale(${s})" fill="#fff" opacity=".9"><circle cx="0" cy="0" r="14"/><circle cx="16" cy="-6" r="18"/><circle cx="34" cy="0" r="13"/><rect x="0" y="0" width="34" height="13"/></g>`;
+function bannerBg(id,h,c1,c2){return `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="1160" height="${h}" rx="18" fill="url(#${id})"/>`}
+
+/* 3-слайд: даму баспалдағы */
+(function(){const H=200;let s=`<svg viewBox="0 0 1160 ${H}" class="chart">`+bannerBg('g-st',H,'#e3f0fd','#e0f6f3');
+ s+=`<path d="M0 ${H-40} Q200 ${H-80} 420 ${H-50} T860 ${H-60} T1160 ${H-45} V${H} H0Z" fill="#cfe9df"/><path d="M0 ${H-22} Q300 ${H-50} 600 ${H-25} T1160 ${H-28} V${H} H0Z" fill="#b9dfcf"/>`;
+ s+=cloud(90,40,1)+cloud(980,34,.8)+`<circle cx="1080" cy="52" r="24" fill="#f6c851"/><circle cx="1080" cy="52" r="34" fill="#f6c851" opacity=".25"/>`;
+ const st=[['Біледі',C.blue],['Түсінеді',C.teal],['Талдайды',C.gold],['Қолданады',C.violet]],bx=360,w=130;
+ st.forEach(([t,c],i)=>{const h=34+i*30,x=bx+i*w,y=H-14-h;s+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c}"/><rect x="${x}" y="${y}" width="${w}" height="8" fill="#fff" opacity=".25"/><text x="${x+w/2}" y="${y+26}" text-anchor="middle" fill="#fff" font-size="15" font-weight="800">${t}</text>`});
+ const topY=H-14-(34+3*30);
+ s+=P(bx+3*w+64,topY,.62,{shirt:C.coral,raise:1,style:'long',hair:'#3a2a20'});
+ s+=`<line x1="${bx+3*w+100}" y1="${topY}" x2="${bx+3*w+100}" y2="${topY-60}" stroke="${C.navy}" stroke-width="3"/><path d="M${bx+3*w+100} ${topY-60} h34 l-8 10 l8 10 h-34z" fill="${C.gold}"/>`;
+ s+=P(bx+w*0.5,H-14-34,.55,{shirt:C.sky,style:'short'})+P(bx+w*1.5,H-14-64,.55,{shirt:C.gold,style:'bun',hair:'#1f1a1a',skin:'#e8b88c'});
+ s+=`<path d="M300 150 Q420 40 ${bx+3*w+50} ${topY-30}" fill="none" stroke="${C.navy}" stroke-width="2" stroke-dasharray="6 6" opacity=".5"/>`;
+ s+=`<g transform="translate(150,82)"><rect x="-60" y="60" width="120" height="16" rx="3" fill="${C.blue}"/><rect x="-52" y="44" width="104" height="16" rx="3" fill="${C.teal}"/><rect x="-56" y="28" width="112" height="16" rx="3" fill="${C.gold}"/><circle cx="0" cy="0" r="20" fill="#fff6d6" stroke="${C.gold}" stroke-width="3"/><path d="M-7 20 h14 v8 h-14z" fill="${C.grey}"/><path d="M-6 2 l6 -8 l6 8" stroke="${C.gold}" stroke-width="2.5" fill="none"/></g>`;
+ s+=spark(980,120,10)+spark(1030,150,7,C.coral)+spark(260,40,8,C.sky)+spark(930,70,6);
+ s+=`<text x="1010" y="${H-60}" text-anchor="middle" font-size="15" font-weight="800" fill="${C.navy}">Мақсатқа қарай</text><text x="1010" y="${H-40}" text-anchor="middle" font-size="13" fill="${C.navy}">қадам-қадаммен</text>`;
+ $('bn-stairs').innerHTML=s+`</svg>`;})();
+
+/* 12-слайд: тұлғаның өсуі */
+(function(){const H=210,g=H-36;let s=`<svg viewBox="0 0 1160 ${H}" class="chart">`+bannerBg('g-gr',H,'#fdf6e3','#e6f5ef');
+ s+=`<circle cx="80" cy="56" r="28" fill="#f6c851"/>${[0,45,90,135,180,225,270,315].map(a=>{const r=a*Math.PI/180;return `<line x1="${80+38*Math.cos(r)}" y1="${56+38*Math.sin(r)}" x2="${80+48*Math.cos(r)}" y2="${56+48*Math.sin(r)}" stroke="#f6c851" stroke-width="4" stroke-linecap="round"/>`}).join('')}`;
+ s+=`<rect x="0" y="${g}" width="1160" height="${H-g}" fill="#a77b52"/><rect x="0" y="${g}" width="1160" height="8" fill="#6fbf73"/>`;
+ const stg=[['Тұқым','құндылық',0],['Өскін','сенім',1],['Көшет','жауапкершілік',2],['Ағаш','кемелдік',3]];
+ stg.forEach(([t,d,k],i)=>{const x=250+i*240;
+  if(k===0)s+=`<ellipse cx="${x}" cy="${g-6}" rx="11" ry="8" fill="#7a4f2a"/><path d="M${x} ${g-13} q2 -10 8 -13" stroke="#6fbf73" stroke-width="3" fill="none"/>`;
+  if(k===1)s+=`<path d="M${x} ${g} v-34" stroke="#3f9a4e" stroke-width="4"/><path d="M${x} ${g-26} q-22 -6 -24 -22 q20 0 24 22z" fill="#6fbf73"/><path d="M${x} ${g-30} q22 -6 24 -22 q-20 0 -24 22z" fill="#58ad62"/>`;
+  if(k===2)s+=`<path d="M${x} ${g} v-70" stroke="#7a5a3a" stroke-width="7"/><circle cx="${x}" cy="${g-86}" r="30" fill="#58ad62"/><circle cx="${x-24}" cy="${g-64}" r="20" fill="#6fbf73"/><circle cx="${x+24}" cy="${g-66}" r="21" fill="#4c9f57"/>`;
+  if(k===3){s+=`<path d="M${x-8} ${g} q4 -50 0 -80 h16 q-4 30 0 80z" fill="#7a5a3a"/><circle cx="${x}" cy="${g-118}" r="46" fill="#4c9f57"/><circle cx="${x-42}" cy="${g-92}" r="32" fill="#58ad62"/><circle cx="${x+44}" cy="${g-94}" r="34" fill="#6fbf73"/><circle cx="${x}" cy="${g-82}" r="30" fill="#58ad62"/>`;
+   [[-30,-120],[20,-140],[40,-96],[-48,-86],[6,-100]].forEach(([dx,dy],j)=>s+=`<circle cx="${x+dx}" cy="${g+dy}" r="6" fill="${[C.coral,C.gold,C.coral,C.gold,C.coral][j]}"/>`);}
+  s+=`<path d="M${x} ${g+8} q-14 10 -26 14 M${x} ${g+8} q12 12 22 14 M${x} ${g+8} v18" stroke="#5a3b22" stroke-width="2" fill="none" opacity="${.3+k*.2}"/>`;
+  s+=`<rect x="${x-88}" y="${g+6}" width="176" height="26" rx="13" fill="#fff" opacity=".92"/><text x="${x}" y="${g+24}" text-anchor="middle" font-size="13" font-weight="800" fill="${C.navy}">${t} · <tspan fill="${C.teal}">${d}</tspan></text>`;
+  if(i<3)s+=`<path d="M${x+70} ${g-30} q50 -26 100 0" fill="none" stroke="${C.navy}" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arg)" opacity=".55"/>`});
+ s=s.replace('</defs>',`<marker id="arg" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="${C.navy}"/></marker></defs>`);
+ s+=P(1090,g,.75,{shirt:C.blue,style:'long',hair:'#3a2a20',raise:1});
+ s+=`<text x="150" y="40" font-size="17" font-weight="800" fill="${C.navy}">Тұлға — өсетін ағаш</text><text x="150" y="62" font-size="13" fill="${C.navy}">күтім, уақыт және қолайлы орта қажет</text>`;
+ $('bn-grow').innerHTML=s+`</svg>`;})();
+
+/* 19-слайд: талқылау үстелі */
+(function(){const H=230;let s=`<svg viewBox="0 0 1160 ${H}" class="chart">`+bannerBg('g-dc',H,'#eaf1fb','#f3eefb');
+ s+=`<rect x="330" y="20" width="500" height="6" rx="3" fill="#c9d6ea"/><rect x="420" y="26" width="320" height="70" rx="8" fill="#fff" stroke="#c9d6ea" stroke-width="3"/><text x="580" y="56" text-anchor="middle" font-size="18" font-weight="800" fill="${C.navy}">Ой бөлісу</text><text x="580" y="80" text-anchor="middle" font-size="13" fill="${C.muted||'#5b6677'}">Ойлан → Жұптас → Бөліс</text>`;
+ const ppl=[[380,{shirt:C.coral,style:'long',hair:'#3a2a20'}],[480,{shirt:C.blue,style:'short',skin:'#e8b88c',raise:1}],[680,{shirt:C.gold,style:'bun'}],[780,{shirt:C.violet,style:'short',hair:'#4a3328',skin:'#e8b88c'}]];
+ ppl.forEach(([x,o])=>s+=P(x,H-14,.95,o));
+ s+=`<ellipse cx="580" cy="${H-46}" rx="290" ry="26" fill="#8a6a4a"/><ellipse cx="580" cy="${H-52}" rx="290" ry="26" fill="#b48a60"/><rect x="420" y="${H-46}" width="14" height="40" fill="#7a5a3a"/><rect x="726" y="${H-46}" width="14" height="40" fill="#7a5a3a"/>`;
+ s+=`<rect x="520" y="${H-66}" width="50" height="10" rx="2" fill="#fff" transform="rotate(-6 545 ${H-61})"/><rect x="590" y="${H-64}" width="46" height="9" rx="2" fill="${C.sky}"/><circle cx="660" cy="${H-58}" r="7" fill="${C.coral}"/>`;
+ const bub=(x,y,w,txt,c,tail)=>`<g><rect x="${x}" y="${y}" width="${w}" height="44" rx="14" fill="#fff" stroke="${c}" stroke-width="3"/><path d="M${x+tail} ${y+44} l8 14 l6 -14" fill="#fff" stroke="${c}" stroke-width="3" stroke-linejoin="round"/><rect x="${x+tail-2}" y="${y+40}" width="18" height="6" fill="#fff"/><text x="${x+w/2}" y="${y+28}" text-anchor="middle" font-size="15" font-weight="800" fill="${c}">${txt}</text></g>`;
+ s+=bub(150,40,150,'Неліктен?',C.coral,120)+bub(860,44,170,'Мысал келтірейін',C.violet,26)+bub(170,120,130,'Келісемін!',C.teal,110)+bub(880,124,150,'Дәлелің қандай?',C.blue,20);
+ s+=`<g transform="translate(70,90)"><circle r="30" fill="#fff6d6"/><path d="M-12 -6 a12 12 0 1 1 24 0 c0 8 -7 10 -7 18 h-10 c0 -8 -7 -10 -7 -18z" fill="${C.gold}"/><rect x="-6" y="14" width="12" height="6" rx="2" fill="${C.grey}"/></g>`;
+ s+=`<g transform="translate(1100,100)"><circle r="30" fill="#e7f5f3"/><text y="12" text-anchor="middle" font-size="34" font-weight="800" fill="${C.teal}">?</text></g>`;
+ $('bn-discuss').innerHTML=s+`</svg>`;})();
+
+/* 21-слайд: рефлексия */
+(function(){const H=210;let s=`<svg viewBox="0 0 1160 ${H}" class="chart">`+bannerBg('g-rf',H,'#fff7e6','#eaf4fd');
+ s+=`<defs><radialGradient id="glow"><stop offset="0" stop-color="#ffe38a"/><stop offset="1" stop-color="#ffe38a" stop-opacity="0"/></radialGradient></defs>`;
+ s+=`<circle cx="580" cy="96" r="96" fill="url(#glow)"/>${Array.from({length:12},(_,i)=>{const a=i*30*Math.PI/180;return `<line x1="${580+62*Math.cos(a)}" y1="${92+62*Math.sin(a)}" x2="${580+80*Math.cos(a)}" y2="${92+80*Math.sin(a)}" stroke="${C.gold}" stroke-width="4" stroke-linecap="round"/>`}).join('')}`;
+ s+=`<path d="M552 120 a40 40 0 1 1 56 0 c-8 8 -10 14 -10 24 h-36 c0 -10 -2 -16 -10 -24z" fill="#ffd54f" stroke="${C.gold}" stroke-width="3"/><path d="M570 120 q10 -26 20 0" stroke="#e08a00" stroke-width="3" fill="none"/><rect x="562" y="146" width="36" height="9" rx="3" fill="${C.grey}"/><rect x="565" y="157" width="30" height="9" rx="3" fill="#8996aa"/><path d="M572 168 h16 l-4 7 h-8z" fill="#5b6677"/>`;
+ s+=`<g transform="translate(150,30)"><rect width="150" height="160" rx="12" fill="#fff" stroke="#c9d6ea" stroke-width="3"/><rect x="50" y="-10" width="50" height="20" rx="6" fill="${C.navy}"/>${['3 ұғым','2 идея','1 сұрақ'].map((t,i)=>`<rect x="18" y="${28+i*42}" width="22" height="22" rx="5" fill="${[C.teal,C.blue,C.coral][i]}"/><path d="M23 ${39+i*42} l5 5 l9 -10" stroke="#fff" stroke-width="3" fill="none"/><text x="50" y="${45+i*42}" font-size="15" font-weight="800" fill="${C.navy}">${t}</text>`).join('')}</g>`;
+ s+=P(860,H-12,.95,{shirt:C.teal,raise:1,style:'long',hair:'#2b2233'})+P(960,H-12,.95,{shirt:C.coral,style:'short',skin:'#e8b88c'})+P(1050,H-12,.85,{shirt:C.violet,raise:1,style:'bun'});
+ s+=`<text x="380" y="70" font-size="40" font-weight="800" fill="${C.sky}" opacity=".6">?</text><text x="740" y="60" font-size="32" font-weight="800" fill="${C.violet}" opacity=".55">?</text><text x="420" y="170" font-size="28" font-weight="800" fill="${C.coral}" opacity=".5">!</text><text x="730" y="175" font-size="34" font-weight="800" fill="${C.teal}" opacity=".5">?</text>`;
+ s+=spark(470,110,9)+spark(690,130,7)+spark(800,40,8,C.coral);
+ $('bn-reflect').innerHTML=s+`</svg>`;})();
+
+/* 22-слайд: түлектер */
+(function(){const H=150;let s=`<svg viewBox="0 0 1160 ${H}" class="chart">`+bannerBg('g-gd',H,'#0f2a4a','#1f5fa8');
+ const cap=(x,y,r)=>`<g transform="translate(${x},${y}) rotate(${r})"><path d="M0 -10 l28 12 l-28 12 l-28 -12z" fill="#0a1d35" stroke="#fff" stroke-width="1.5"/><path d="M-14 6 v10 q14 8 28 0 v-10" fill="#0a1d35" stroke="#fff" stroke-width="1.5"/><path d="M22 4 v14" stroke="${C.gold}" stroke-width="2.5"/></g>`;
+ s+=cap(300,40,-20)+cap(560,26,12)+cap(860,38,-8);
+ for(let i=0;i<40;i++){const x=30+(i*137)%1100,y=22+(i*53)%80,c=[C.gold,C.coral,'#7fe0d8','#fff',C.sky][i%5];s+=`<rect x="${x}" y="${y}" width="7" height="12" rx="2" fill="${c}" transform="rotate(${i*31} ${x} ${y})" opacity=".85"/>`}
+ [[200,{shirt:C.teal,raise:1,style:'long'}],[420,{shirt:C.gold,raise:1,style:'short',skin:'#e8b88c'}],[640,{shirt:C.coral,raise:1,style:'bun'}],[860,{shirt:C.sky,raise:1,style:'short',hair:'#4a3328'}],[1000,{shirt:C.violet,style:'long',skin:'#e8b88c'}]].forEach(([x,o])=>s+=P(x,H-6,.72,o));
+ s+=`<text x="40" y="${H-60}" font-size="22" font-weight="800" fill="#fff">Білімді.</text><text x="40" y="${H-34}" font-size="22" font-weight="800" fill="#7fe0d8">Ізгі.</text><text x="40" y="${H-8}" font-size="22" font-weight="800" fill="${C.gold}">Бақытты.</text>`;
+ $('bn-grad').innerHTML=s+`</svg>`;})();
+
 /* ===================== ХАБ-ДИАГРАММА ===================== */
 (function(){const items=[['Тереңдетілген STEM',C.blue],['Олимпиадалық резерв',C.sky],['Көптілді оқыту',C.violet],['Интернат режимі',C.gold],['Кураторлық жүйе',C.teal],['Ата-ана серіктестігі',C.coral]];
  let s=`<svg viewBox="0 0 560 470" class="chart">`;const cx=280,cy=235,R=170;
